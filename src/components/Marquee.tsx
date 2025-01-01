@@ -17,7 +17,7 @@ const MarqueeSection = () => {
     <div className="bg-gray-900 py-8 overflow-hidden cursor-pointer pt-0 mt-4" >
       <Marquee
         gradient={true}
-        gradientColor={[17, 24, 39]}
+        gradientColor="17, 24, 39"
         gradientWidth={100}
         speed={50}
         pauseOnHover={true}
