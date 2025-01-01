@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+nextjs-portal {
+  display: none;
+}
+@font-face {
+  font-family: 'Doner'; /* General family name */
+  src: url('../assets/fonts/Doner-RegularDisplay.otf') format('opentype'); /* Regular Display */
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Doner'; /* General family name */
+  src: url('../assets/fonts/Doner-RegularDisplayItalic.otf') format('opentype'); /* Display Italic */
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'DonerText'; /* Specific name for text styles */
+  src: url('../assets/fonts/Doner-RegularText.otf') format('opentype'); /* Regular Text */
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DonerText'; /* Specific name for text styles */
+  src: url('../assets/fonts/Doner-RegularTextItalic.otf') format('opentype'); /* Text Italic */
+  font-weight: normal;
+  font-style: italic;
+}
+
+.text-outline-double {
+  text-shadow: 
+  2px 2px 0px white,     /* First white outline (small) */
+  -2px -2px 0px white,   /* First white outline (other side) */
+  4px 4px 0px black,     /* Second black outline (larger) */
+  -4px -4px 0px black;
+}
