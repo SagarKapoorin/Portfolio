@@ -2,6 +2,8 @@
 
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import Header from '@/components/Header'
+import MarqueeSection from '@/components/Marquee';
+import { MarqueeDemo } from '@/components/Marquee_comment';
 import React from 'react'
 const Home = () => {
   return (
@@ -13,6 +15,8 @@ const Home = () => {
         SAGAR <br className="mt-[-0.5rem]" /> KAPOOR
       </h1>
     </div>
+    <MarqueeSection/>
+    <MarqueeDemo/>
     </div>
   )
 }
