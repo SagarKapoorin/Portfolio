@@ -14,12 +14,12 @@ const items = [
 
 const MarqueeSection = () => {
   return (
-    <div className="bg-gray-900 py-8 overflow-hidden cursor-pointer pt-0 mt-4" >
+    <div className="bg-gray-900 py-8 pb-0 overflow-hidden cursor-pointer pt-0 mt-4" >
       <Marquee
         gradient={true}
         gradientColor="17, 24, 39"
         gradientWidth={100}
-        speed={50}
+        speed={20}
         pauseOnHover={true}
         className="py-4"
       >

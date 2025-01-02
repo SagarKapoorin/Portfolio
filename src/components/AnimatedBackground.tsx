@@ -25,9 +25,8 @@ export const AnimatedBackground: React.FC = () => {
       size: Math.random() * 5 + 2,
       speedX: Math.random() * 1 - 0.5,
       speedY: Math.random() * 1 - 0.5,
-      hue: 225,    
-      opacity: 1,  
-      
+      hue: Math.random() * 360, // Full hue range for vibrant colors
+      opacity: 1,
     }));
   };
 

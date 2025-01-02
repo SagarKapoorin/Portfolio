@@ -1,5 +1,6 @@
 "use client";
 
+import AboutMe from '@/components/AboutMe';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import Header from '@/components/Header'
 import MarqueeSection from '@/components/Marquee';
@@ -16,7 +17,7 @@ const Home = () => {
       </h1>
     </div>
     <MarqueeSection/>
-    <MarqueeDemo/>
+    <AboutMe/>
     </div>
   )
 }
