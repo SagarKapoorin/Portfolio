@@ -4,16 +4,16 @@ import img from '../assets/profile.svg';
 
 const AboutMe = () => {
   const [displayText, setDisplayText] = useState('');
-  const fullText = "Hii, I'm Sagar Kapoor, a passionate developer with a keen interest in problem-solving and building innovative solutions. I enjoy exploring new technologies, collaborating with teams, and contributing to open-source projects. When not coding, you'll find me solving challenges on platforms like LeetCode.";
+  const fullText = "Hii, I'm Sagar Kapoor, a passionate developer with a keen interest in Football , problem-solving and building innovative-solutions. I enjoy exploring new technologies, collaborating with teams, and contributing to open-source projects. When not coding, you'll find me solving challenges on platforms like LeetCode and CodeForces.";
 
   useEffect(() => {
-    console.log(img);
+    // console.log(img);
     let index = 0;
     const typingInterval = setInterval(() => {
       if (index < fullText.length-1) {
         setDisplayText((prev) => prev + fullText[index]);
-        console.log(fullText.length);
-        console.log(index);
+        // console.log(fullText.length);
+        // console.log(index);
         index++;
       } else {
         clearInterval(typingInterval);
@@ -34,18 +34,18 @@ const AboutMe = () => {
               <svg className="terminal-icon" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 17l6-6-6-6M12 19h8" />
               </svg>
-              About me
+              
             </span>
           </div>
           <div className="terminal-body">
             <div className="command-line">
-              <span className="prompt whitespace-nowrap">About me:</span>
+              <span className="prompt whitespace-nowrap">C:/User/About-me:</span>
               <span className="input-field whitespace-nowrap ">cat About_me.txt</span>
             </div>
             <div className="loading-text">
               <p className="mt-4 text-gray-300 leading-relaxed bold">
                 {displayText.split(' ').map((word, index) => (
-                  <span key={index} className={word.includes('Sagar Kapoor') || word.includes('problem-solving') || word.includes('innovative solutions') || word.includes('open-source projects') || word.includes('LeetCode') ? 'text-indigo-400' : ''}>
+                  <span key={index} className={word.includes('Kapoor') ||word.includes('Football')||word.includes('Sagar') || word.includes('problem-solving') || word.includes('innovative-solutions') || word.includes('open-source')||word.includes('CodeForces') || word.includes('LeetCode') ? 'text-indigo-400 font-bold' : ''}>
                     {word}{' '}
                   </span>
                 ))}

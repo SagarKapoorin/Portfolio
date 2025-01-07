@@ -10,6 +10,33 @@ export default {
   ],
   theme: {
   	extend: {
+		keyframes: {
+			fadeIn: {
+			  '0%': { opacity: '0' },
+			  '100%': { opacity: '1' },
+			},
+			marquee: {
+				from: {
+					transform: 'translateX(0)'
+				},
+				to: {
+					transform: 'translateX(calc(-100% - var(--gap)))'
+				}
+			},
+			'marquee-vertical': {
+				from: {
+					transform: 'translateY(0)'
+				},
+				to: {
+					transform: 'translateY(calc(-100% - var(--gap)))'
+				}
+			}
+		},
+		animation: {
+			fadeIn: 'fadeIn 1s ease-in-out',
+			marquee: 'marquee var(--duration) infinite linear',
+			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite'
+		},
   		screens: {
   			'max-sm': {
   				max: '430px'
@@ -83,30 +110,8 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		},
-  		keyframes: {
-  			marquee: {
-  				from: {
-  					transform: 'translateX(0)'
-  				},
-  				to: {
-  					transform: 'translateX(calc(-100% - var(--gap)))'
-  				}
-  			},
-  			'marquee-vertical': {
-  				from: {
-  					transform: 'translateY(0)'
-  				},
-  				to: {
-  					transform: 'translateY(calc(-100% - var(--gap)))'
-  				}
-  			}
-  		},
-  		animation: {
-  			marquee: 'marquee var(--duration) infinite linear',
-  			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite'
-  		}
-  	}
+		}
+	}
   },
   plugins: [
     plugin(({ addUtilities }) => {

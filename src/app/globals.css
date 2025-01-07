@@ -107,3 +107,24 @@ nextjs-portal {
     @apply bg-background text-foreground;
   }
 }
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animation-sagar {
+  display: inline-block;
+  animation: slideUp 1s ease-in-out forwards;
+}
+
+.animation-kapoor {
+  opacity: 0;
+  display: inline-block;
+  animation: slideUp 1s ease-in-out 0.5s forwards; /* Delay for the second word */
+}
