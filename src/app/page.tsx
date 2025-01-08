@@ -6,6 +6,7 @@ import MarqueeSection from '@/components/Marquee';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import Loader from '@/components/Loader';
 import Project from '@/components/Project';
+import { Experience } from '@/components/Experience';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ const Home = () => {
         </div>
           <MarqueeSection />
           <Project/>
+          <Experience/>
       </div>
     )
   );
