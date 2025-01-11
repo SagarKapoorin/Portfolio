@@ -54,7 +54,7 @@ export function Experience() {
       content: (
         <div>
           <p className="text-white dark:text-neutral-200 text-sm md:text-base font-normal mb-4">
-            Started with MERN stack and CP in 2022
+            Started with MERN stack and CP in 2022 and go on hitting 1433 on Codeforce and 1836 on Leetcode
           </p>
          
           <div className="flex mb-6">
