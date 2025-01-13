@@ -6,7 +6,7 @@ const SocialMedia = () => {
     {
         name: 'Resume',
         icon: <FileText className="w-8 h-8" />, 
-        url: 'https://drive.google.com/file/d/1PCd4P2h_vqMS2gxRDvPLKb3D2j-rlEF_/view?usp=sharing', 
+        url: 'https://drive.google.com/file/d/1w51uwLOzg7s4UEIxENLgn8T3MVmiI768/view?usp=sharing', 
         color: 'group-hover:text-white',
         default: 'text-purple-700',
         stats: 'Full Stack Developer and Competitive Programmer', 
