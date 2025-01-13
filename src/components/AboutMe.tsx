@@ -4,6 +4,8 @@ import sagar2 from "@/assets/sagar2.jpg"
 import sagar3 from "@/assets/sagar3.jpg"
 import sagar4 from "@/assets/sagar4.jpg"
 import sagar5 from "@/assets/sagar5.jpg"
+import Heading from "./Heading";
+import SocialMedia from "./SocialMedia";
 
 export function AboutMe() {
   const testimonials = [
@@ -45,17 +47,11 @@ export function AboutMe() {
   ];
   return (<>
   <div className="container mx-auto px-4 pt-16 ">
-        <div className="relative">
-          <div className="absolute -left-4 -top-4 w-24 h-24 bg-blue-900/20 rounded-full blur-2xl opacity-60"></div>
-          <div className="absolute right-10 top-0 w-16 h-16 bg-purple-900/20 rounded-full blur-xl opacity-60"></div>
-          <div className="relative flex flex-col items-center text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-            About Meeeee
-            </h2>
-            <div className="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-0"></div>
-          </div>
-        </div>
-      </div>
-  <AnimatedTestimonials testimonials={testimonials} />
+        <Heading heading="About Meeee"/>
+     
+    </div>
+    <AnimatedTestimonials testimonials={testimonials} />
+    <SocialMedia/>
+
   </>);
 }
