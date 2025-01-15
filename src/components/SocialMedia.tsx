@@ -1,7 +1,11 @@
+"use client"
 import React from 'react';
 import { Github, Linkedin, Twitter, Code2, Code, Instagram,X ,FileText  } from 'lucide-react';
+import { useState } from 'react';
+import Form from './Form';
 
 const SocialMedia = () => {
+  const [contact,useContact]=useState(false);
   const socialLinks = [
     {
         name: 'Resume',
@@ -123,17 +127,22 @@ const SocialMedia = () => {
             </a>
           ))}
         </div>
-
-        <div className="mt-20 text-center relative">
+    
+     <div className="mt-20 text-center relative">
+     {!contact &&<Form/>}
           <a
-            href="mailto:contact@example.com"
+          onClick={(e) => {
+            e.preventDefault(); 
+            useContact(!contact);
+          }}
+      
             className="inline-block mt-6 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-pink-500 to-cyan-500 bg-300% 
               text-white font-medium hover:shadow-lg hover:shadow-pink-500/20 
               transition-all duration-300 transform hover:scale-105 animate-gradient"
           >
-            Or Send Me Direct Message
+               {contact?"Or Send Me Direct Message":"Cancel"}
           </a>
-        </div>
+        </div>  
       </div>
     </section>
   );
