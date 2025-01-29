@@ -4,28 +4,13 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import MarqueeSection from '@/components/Marquee';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
-import Loader from '@/components/Loader';
 import Project from '@/components/Project';
 import { Experience } from '@/components/Experience';
 import Footer from '@/components/Footer';
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
- 
-  
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    loading ? (
-      <div className="bg-white h-screen w-screen">
-        <Loader />
-      </div>
-    ) : (
+
       <div className="bg-black min-h-screen w-screen transition-opacity duration-1000 ease-in-out opacity-1 animate-fadeIn">
         <Header />
         <AnimatedBackground />
@@ -39,7 +24,6 @@ const Home = () => {
           <Experience/>
           <Footer/>
       </div>
-    )
   );
 };
 

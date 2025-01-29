@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Form from './Form';
 
 const SocialMedia = () => {
-  const [contact,useContact]=useState(false);
+  const [contact,useContact]=useState(true);
   const socialLinks = [
     {
         name: 'Resume',
@@ -136,7 +136,7 @@ const SocialMedia = () => {
             useContact(!contact);
           }}
       
-            className="inline-block mt-6 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-pink-500 to-cyan-500 bg-300% 
+            className="inline-block mt-6 px-8 py-4 rounded-2xl cursor-pointer bg-gradient-to-r from-cyan-500 via-pink-500 to-cyan-500 bg-300% 
               text-white font-medium hover:shadow-lg hover:shadow-pink-500/20 
               transition-all duration-300 transform hover:scale-105 animate-gradient"
           >
