@@ -25,6 +25,7 @@ model Payment {
   amount    Float
   currency  String   @default("USD")
   createdAt DateTime @default(now())
+  status    PaymentStatus @default(PENDING)
   user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id   String
 }
