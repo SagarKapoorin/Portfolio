@@ -56,15 +56,15 @@ export default function Page() {
     <AnimatedBackground/>
     <div className="min-h-screen  flex items-center justify-center p-4">
     <div className="w-full max-w-md relative z-20">
+        <div className="bg-black-700 rounded-2xl shadow-2xl border-2 border-gray-700 overflow-hidden backdrop-blur-sm">
         <div className="absolute -top-2 left-1/2 -translate-x-1/2 transform">
           <div className="w-16 h-16 bg-black-900 rounded-2xl flex items-center justify-center shadow-xl">
             <LockKeyhole className="w-8 h-8 text-indigo-600" />
           </div>
         </div>
-        <div className="bg-black-700 rounded-2xl shadow-2xl border-2 border-gray-700 overflow-hidden backdrop-blur-sm">
           <div className="px-8 pt-12 pb-8">
             <div className="text-center space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight text-white">
+              <h1 className="text-3xl font-bold tracking-tight text-white whitespace-nowrap">
                 Authentication
                 <Sparkles className="w-5 h-5 inline-block ml-2 text-yellow-500" />
               </h1>
@@ -101,7 +101,7 @@ export default function Page() {
             <div className="flex items-center justify-center space-x-1 p-1 bg-gray-700/50 rounded-lg">
               <button
                 onClick={() => setActiveTab('login')}
-                className={`flex-1 px-8 py-2.5 rounded-md text-sm font-medium transition-all duration-200 ${
+                className={`flex-1 px-8  py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                   activeTab === 'login'
                     ? 'bg-indigo-600 text-white shadow-lg'
                     : 'hover:hover:bg-gray-700 text-gray-300'
