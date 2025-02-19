@@ -93,7 +93,7 @@ export default function Page() {
                 <span className="w-full border-t border-gray-600" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-gray-800 px-2 text-gray-400 rounded-lg">
+                <span className="bg-gray-800 px-4 py-2 text-gray-400 rounded-lg">
                   Or continue with email
                 </span>
               </div>
