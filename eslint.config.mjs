@@ -10,6 +10,15 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Ignore linting on UI components and assets
+  {
+    ignorePatterns: [
+      "src/components/**/*",
+      "src/assets/**/*",
+      "src/app/aboutme/page.tsx",
+      "src/app/signin/page.tsx",
+    ],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 

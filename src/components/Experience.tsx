@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
-import img1 from "@/assets/wyb.jpg";
-import img2 from "@/assets/develop2.png";
+import img1 from "@/assets/wyb.webp";
+import img2 from "@/assets/develop2.webp";
 import img3 from "@/assets/start.webp";
 
 export function Experience() {

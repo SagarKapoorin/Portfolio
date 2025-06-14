@@ -1,11 +1,9 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaClient } from "@prisma/client";
+import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -20,33 +18,32 @@ export const authOptions: NextAuthOptions = {
         if (!credentials) {
           throw new Error('Credentials are missing');
         }
-
-        let user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
+        const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10', 10);
+        let user = await prisma.user.findUnique({ where: { email: credentials.email } });
         if (!user) {
+          const hashed = await bcrypt.hash(credentials.password, saltRounds);
           user = await prisma.user.create({
             data: {
               email: credentials.email,
-              password: await bcrypt.hash(credentials.password, process.env.SALT || 'my_salt:sagar'),
+              password: hashed,
               name: credentials.name,
               loginType: 'PASSWORD',
             },
           });
         } else {
-          const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password ?? '');
+          const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password || '');
           if (!isPasswordCorrect) {
             throw new Error('Incorrect password');
           }
         }
-
         return user;
       },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      // Request email scope to ensure profile.email is populated
+      authorization: { params: { scope: 'read:user user:email' } },
       async profile(profile) {
         let user = await prisma.user.findUnique({
           where: { email: profile.email },
@@ -68,6 +65,8 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      // Ensure we receive email and profile info
+      authorization: { params: { scope: 'openid email profile' } },
       async profile(profile) {
         let user = await prisma.user.findUnique({
           where: { email: profile.email },
@@ -102,13 +101,18 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    // Always redirect to the base URL (e.g. home) after signin
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
   },
   session: {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/sign-in", 
+    // custom sign-in path
+    signIn: "/signin",
   },
 };
 

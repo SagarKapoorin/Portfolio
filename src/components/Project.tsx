@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { Cards } from '@/components/Cards';
-import img from '@/assets/Screenshot 2024-12-16 131253.png'
-import img2 from '@/assets/wyb.jpg'
-import img3 from "@/assets/Screenshot 2024-12-16 144413.png"
-import img4 from "@/assets/Screenshot 2024-12-16 110927.png"
+import img from '@/assets/Screenshot 2024-12-16 131253.webp';
+import img2 from '@/assets/wyb.webp';
+import img3 from '@/assets/Screenshot 2024-12-16 144413.webp';
+import img4 from '@/assets/Screenshot 2024-12-16 110927.webp';
 import { Code2 } from 'lucide-react';
 
 const Project = () => {

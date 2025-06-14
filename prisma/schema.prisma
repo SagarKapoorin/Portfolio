@@ -8,51 +8,60 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  email         String         @unique
-  name          String
-  password      String?
-  payments      Payment[]
-  messages      Messages[]
-  subscriptions Subscription[]
-  loginType     LoginType
-  createdAt     DateTime       @default(now())
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  password     String?
+  payments     Payment[]
+  // messages and subscriptions removed
+  loginType    LoginType
+  createdAt    DateTime      @default(now())
+  // relation to hire requests
+  hireRequests HireRequest[]
+
   @@index([email])
 }
 
 model Payment {
-  id        String   @id @default(cuid())
-  amount    Float
-  currency  String   @default("USD")
-  createdAt DateTime @default(now())
-  status    PaymentStatus @default(PENDING)
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id   String
+  id              String        @id @default(cuid())
+  amount          Float
+  currency        String        @default("USD")
+  createdAt       DateTime      @default(now())
+  status          PaymentStatus @default(PENDING)
+  user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id         String
+  razorpayOrderId String?       @unique
 }
 
-model Messages {
-  id        String   @id @default(cuid())
-  message   String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id   String
+// Messages and Subscription models removed as they are no longer used
+
+model WebhookEvent {
+  id          String    @id
+  type        String
+  receivedAt  DateTime  @default(now())
+  processedAt DateTime?
 }
 
-model Subscription {
-  id          String   @id @default(cuid())
-  startDate   DateTime @default(now())
-  endDate     DateTime
-  amount      Decimal  @db.Decimal(10, 2) 
-  currency    String   @default("USD")
-  status      SubscriptionStatus @default(ACTIVE)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  @@index([endDate(sort: Asc)])
+model DeveloperStatus {
+  id        Int      @id @default(1)
+  available Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+model HireRequest {
+  id            String   @id @default(cuid())
+  title         String
+  budget        Float
+  projectDetail String
+  timePeriod    String
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+  createdAt     DateTime @default(now())
 }
 
 enum LoginType {
-  GOOGLE    
-  PASSWORD 
+  GOOGLE
+  PASSWORD
   GITHUB
 }
 
@@ -63,9 +72,4 @@ enum PaymentStatus {
   REFUNDED
 }
 
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  EXPIRED
-}
-
+// SubscriptionStatus enum removed; no Subscription model

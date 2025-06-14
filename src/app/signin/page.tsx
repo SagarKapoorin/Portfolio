@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import google from '@/assets/google.png' ;
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import google from '@/assets/google.webp';
 import Image from "next/image";
-import { Github, Mail, LockKeyhole, Sparkles } from "lucide-react";
+import { Github, LockKeyhole, Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 const loginSchema = z.object({
@@ -45,11 +47,38 @@ export default function Page() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema> | z.infer<typeof registerSchema>) {
+  const router = useRouter();
+  const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
-    console.log(values);
-    setTimeout(() => setIsLoading(false), 1000);
-  }
+    const res = await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+      callbackUrl: '/',
+    });
+    setIsLoading(false);
+    if (res?.error) {
+      alert('Login failed: ' + res.error);
+    } else {
+      router.push(res?.url || '/');
+    }
+  };
+  const onRegisterSubmit = async (values: z.infer<typeof registerSchema>) => {
+    setIsLoading(true);
+    const res = await signIn('credentials', {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      redirect: false,
+      callbackUrl: '/',
+    });
+    setIsLoading(false);
+    if (res?.error) {
+      alert('Registration failed: ' + res.error);
+    } else {
+      router.push(res?.url || '/');
+    }
+  };
 
   return (
     <>
@@ -76,12 +105,16 @@ export default function Page() {
           <div className="px-8 pb-8 space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <button 
+                type="button"
+                onClick={() => signIn('github')}
                 className="flex items-center justify-center px-4 py-2.5 border border-gray-600 rounded-lg text-sm font-medium text-gray-200 hover:bg-gray-700/50 transition-colors duration-200"
               >
                 <Github className="mr-2 h-4 w-4" />
-                Github
+                GitHub
               </button>
               <button 
+                type="button"
+                onClick={() => signIn('google')}
                 className="flex items-center justify-center px-4 py-2.5 border border-gray-600 rounded-lg text-sm font-medium text-gray-200 hover:bg-gray-700/50 transition-colors duration-200"
               >
                 <Image src={google} alt="google" className="mr-2 h-4 w-4 mt-0.5" />
@@ -121,8 +154,8 @@ export default function Page() {
               </button>
             </div>
             <div className="space-y-4">
-              {activeTab === 'login' ? (
-                <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-4">
+            {activeTab === 'login' ? (
+                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-200 mb-1.5">
                       Email
@@ -163,8 +196,8 @@ export default function Page() {
                     {isLoading ? "Authenticating..." : "Sign in"}
                   </button>
                 </form>
-              ) : (
-                <form onSubmit={registerForm.handleSubmit(onSubmit)} className="space-y-4">
+            ) : (
+                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-200 mb-1.5">
                       Full Name

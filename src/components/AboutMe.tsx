@@ -1,9 +1,9 @@
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
-import sagar1 from "@/assets/sagar1.jpg"
-import sagar2 from "@/assets/sagar2.jpg"
-import sagar3 from "@/assets/sagar3.jpg"
-import sagar4 from "@/assets/sagar4.jpg"
-import sagar5 from "@/assets/sagar5.jpg"
+import sagar1 from "@/assets/sagar1.webp"
+import sagar2 from "@/assets/sagar2.webp"
+import sagar3 from "@/assets/sagar3.webp"
+import sagar4 from "@/assets/sagar4.webp"
+import sagar5 from "@/assets/sagar5.webp"
 import Heading from "./Heading";
 import SocialMedia from "./SocialMedia";
 
