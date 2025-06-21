@@ -42,7 +42,6 @@ export const authOptions: NextAuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      // Request email scope to ensure profile.email is populated
       authorization: { params: { scope: 'read:user user:email' } },
       async profile(profile) {
         let user = await prisma.user.findUnique({
@@ -65,7 +64,6 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      // Ensure we receive email and profile info
       authorization: { params: { scope: 'openid email profile' } },
       async profile(profile) {
         let user = await prisma.user.findUnique({
@@ -101,7 +99,6 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    // Always redirect to the base URL (e.g. home) after signin
     async redirect({ url, baseUrl }) {
       return baseUrl;
     },
@@ -111,7 +108,6 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    // custom sign-in path
     signIn: "/signin",
   },
 };

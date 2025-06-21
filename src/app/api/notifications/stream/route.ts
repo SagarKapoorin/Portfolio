@@ -1,9 +1,5 @@
 import { subscriber } from '@/lib/redis';
 
-/**
- * GET /api/notifications/stream
- * Streams server-sent events for real-time notifications
- */
 export async function GET() {
   const { readable, writable } = new TransformStream();
   const writer = writable.getWriter();

@@ -13,9 +13,7 @@ const HireSchema = z.object({
   timePeriod: z.string().min(1, 'Time period required'),
 });
 
-/**
- * POST /api/hire - stores hire message and notifies admin
- */
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {

@@ -5,7 +5,6 @@ import { rateLimit } from './src/lib/rate-limit';
 export const runtime = 'nodejs';
 
 export async function middleware(req: NextRequest) {
-  console.log('Middleware triggered for:', req.nextUrl.pathname);
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
   try {
     await rateLimit(`global_rate:${ip}`, 100, 60);

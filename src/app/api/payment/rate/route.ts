@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { redis } from '@/lib/redis';
 
-/**
- * GET /api/payment/rate?base=USD&target=INR
- * Returns exchange rate, cached in Redis
- */
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const base = searchParams.get('base') || 'USD';

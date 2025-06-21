@@ -14,9 +14,7 @@ const VerifySchema = z.object({
   razorpay_signature: z.string(),
 });
 
-/**
- * POST /api/payment/verify - verifies signature and updates payment status
- */
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
@@ -35,7 +33,6 @@ export async function POST(req: Request) {
     key_id: process.env.RAZORPAY_KEY_ID!,
     key_secret: process.env.RAZORPAY_KEY_SECRET!,
   });
-  // Fetch Razorpay order (cast to any to access receipt property)
   const order: any = await razorpay.orders.fetch(razorpay_order_id);
   const receipt = order.receipt as string;
   await prisma.payment.update({ where: { id: receipt }, data: { status: 'COMPLETED' } });
