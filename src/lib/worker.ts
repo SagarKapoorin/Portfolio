@@ -5,10 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
 
-// Admin recipient email (where we send alerts)
-const adminRecipient = process.env.ADMIN_EMAIL!;
-// From address for outgoing emails (fallback to MAIL_USER or adminRecipient)
-const fromAddress = process.env.EMAIL_FROM || process.env.MAIL_USER || adminRecipient;
+
+const fromAddress = process.env.EMAIL_FROM;
 const templatesDir = path.resolve(process.cwd(), 'src/lib/email-templates');
 const emailTemplates: Record<string, handlebars.TemplateDelegate> = {};
 fs.readdirSync(templatesDir).forEach((file) => {
@@ -19,11 +17,9 @@ fs.readdirSync(templatesDir).forEach((file) => {
   }
 });
 
-console.log('Mail worker started, waiting for jobs...');
 async function processQueue() {
   while (true) {
     try {
-      // BRPOP returns [queueKey, payload]
       const res = await redis.brPop(mailQueueKey, 0);
       if (!res) continue;
       const payload = Array.isArray(res) ? res[1] : res.element;
@@ -31,14 +27,12 @@ async function processQueue() {
       const { name, data } = job;
       if (name === 'payment-email') {
         const { userEmail, paymentData } = data;
-        // Send to admin
         await transporter.sendMail({
           from: fromAddress,
-          to: adminRecipient,
+          to: process.env.ADMIN_EMAIL,
           subject: 'Payment Completed',
           html: emailTemplates['payment-email-admin']({ userEmail, paymentData }),
         });
-        // Send to user
         await transporter.sendMail({
           from: fromAddress,
           to: userEmail,
@@ -47,27 +41,22 @@ async function processQueue() {
         });
       } else if (name === 'hire-email') {
         const { userEmail, title, budget, projectDetail, timePeriod } = data;
-        // Send to admin
-        const result= await transporter.sendMail({
+        await transporter.sendMail({
           from: fromAddress,
-          to: adminRecipient,
+          to: process.env.ADMIN_EMAIL,
           subject: `Hire Request: ${title}`,
           html: emailTemplates['hire-email-admin']({ userEmail, title, budget, projectDetail, timePeriod }),
         });
-        // Send confirmation to user
-        const result2=await transporter.sendMail({
+        await transporter.sendMail({
           from: fromAddress,
           to: userEmail,
           subject: 'We received your hire request',
           html: emailTemplates['hire-email-user']({ userEmail, title, budget, projectDetail, timePeriod }),
         });
-        console.log('Email sent successfully',result,result2);
 
       }
-      console.log(`Processed job: ${name} with data`, data);
     } catch (err) {
       console.error('Error processing mail job:', err);
-      // continue processing next jobs
     }
   }
 }

@@ -1,11 +1,5 @@
 import { redis } from './redis';
-/**
- * Fixed-window rate limiter using Redis INCR + EXPIRE
- * @param key Unique key (e.g. per IP + route)
- * @param limit Max number of requests per window
- * @param windowSec Window size in seconds
- * @throws Error if rate limit exceeded
- */
+
 export async function rateLimit(key: string, limit: number, windowSec: number) {
   const current = await redis.incr(key);
   console.log(`Current count for ${key}: ${current}`);

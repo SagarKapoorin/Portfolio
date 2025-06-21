@@ -11,9 +11,7 @@ const CreateOrderSchema = z.object({
   currency: z.enum(['USD', 'INR']),
 });
 
-/**
- * POST /api/payment/create - creates a Razorpay order and a pending Payment record
- */
+
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {

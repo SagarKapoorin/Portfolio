@@ -4,10 +4,7 @@ import crypto from 'crypto';
 import { redis } from '@/lib/redis';
 import { enqueueMailJob } from '@/lib/queue';
 
-/**
- * POST /api/payment/webhook
- * Secured Razorpay webhook to confirm payment events
- */
+
 export async function POST(req: Request) {
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET!;
   const signature = req.headers.get('x-razorpay-signature') || '';
