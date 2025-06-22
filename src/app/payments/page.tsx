@@ -7,29 +7,21 @@ import type { Payment } from '@prisma/client';
 import React from 'react';
 
 interface Props {
-  searchParams: {
-    page?: string;
-    q?: string;
-    startDate?: string;
-    endDate?: string;
-  };
+  searchParams: any;
 }
 
 export default async function PaymentsPage({ searchParams }: Props) {
-  // Auth guard
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     redirect('/sign-in');
   }
   const userId = session.user.id;
-  // Parse filters
   const page = parseInt(searchParams.page || '1', 10);
   const q = searchParams.q || '';
   const start = searchParams.startDate ? new Date(searchParams.startDate) : null;
   const end = searchParams.endDate ? new Date(searchParams.endDate) : null;
   const limit = 10;
   const offset = (page - 1) * limit;
-  // Build where clause
   const where: any = { user_id: userId };
   if (q) where.id = { contains: q };
   if (start || end) {
