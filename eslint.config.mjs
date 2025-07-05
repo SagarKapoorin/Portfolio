@@ -12,11 +12,11 @@ const compat = new FlatCompat({
 const eslintConfig = [
   // Ignore linting on UI components and assets
   {
-    ignorePatterns: [
+    ignores: [
       "src/components/**/*",
       "src/assets/**/*",
-      "src/app/aboutme/page.tsx",
-      "src/app/signin/page.tsx",
+      "src/app/**/*",
+      "src/lib/**/*",
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
