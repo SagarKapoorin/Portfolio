@@ -39,10 +39,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set image tag (lowercase)
+        run: |
+          # Normalize repository name for Docker tag
+          IMAGE_TAG="ghcr.io/$(echo \"${GITHUB_REPOSITORY}\" | tr '[:upper:]' '[:lower:]'):latest"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
       - uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/${{ github.repository }}
+          tags: ${{ env.IMAGE_TAG }}
