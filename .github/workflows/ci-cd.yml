@@ -26,7 +26,10 @@ jobs:
     name: Build and Push Docker Image
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Run on pushes to main or PRs targeting main
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'main')
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v2
