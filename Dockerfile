@@ -19,14 +19,18 @@ FROM node:18-alpine AS production
 WORKDIR /app
 
 # Install only production dependencies
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+ COPY package.json package-lock.json ./
+ RUN npm ci --omit=dev
 
-    # Install PM2 globally to manage both processes
-    RUN npm install pm2 -g
+# Install PM2 globally to manage both processes
+ RUN npm install pm2 -g
+
+# Copy Prisma schema and generate client for production
+ COPY prisma ./prisma
+ RUN npx prisma generate
 
 ## Copy built assets and necessary files
-COPY --from=builder /app/.next ./.next
+ COPY --from=builder /app/.next ./.next
 # If you have a public directory, uncomment to include it
 # COPY --from=builder /app/public ./public
 COPY --from=builder /app/src ./src
@@ -36,5 +40,6 @@ COPY ecosystem.config.js ./
 ENV NODE_ENV=production
 EXPOSE 3000
 
-# Use PM2 runtime to orchestrate Next.js server + worker
-CMD ["npm","run","pm2:start"]
+# Use PM2 runtime to orchestrate Next.js server + worker in foreground
+# Apply any pending Prisma migrations, then start PM2
+CMD ["sh", "-c", "npx prisma migrate deploy && pm2-runtime start ecosystem.config.js"]
