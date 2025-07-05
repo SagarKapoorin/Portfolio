@@ -34,8 +34,8 @@ WORKDIR /app
 # If you have a public directory, uncomment to include it
 # COPY --from=builder /app/public ./public
 COPY --from=builder /app/src ./src
-## Copy PM2 ecosystem configuration
-COPY ecosystem.config.js ./
+## Copy PM2 ecosystem configuration (use Docker-specific config)
+COPY ecosystem-docker.config.js ./ecosystem.config.js
 
 ENV NODE_ENV=production
 EXPOSE 3000
