@@ -19,6 +19,7 @@ const CreateOrderSchema = z
         inclusive: true,
         message: 'Maximum $5',
         path: ['amount'],
+        type: 'number',
       });
     }
     if (data.currency === 'INR' && data.amount > 1000) {
@@ -28,6 +29,7 @@ const CreateOrderSchema = z
         inclusive: true,
         message: 'Maximum ₹1000',
         path: ['amount'],
+        type: 'number',
       });
     }
   });
