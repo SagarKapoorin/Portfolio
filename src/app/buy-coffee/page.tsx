@@ -1,20 +1,40 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useSession } from 'next-auth/react';
 import Script from 'next/script';
 
-const PaymentSchema = z.object({
-  amount: z.number().positive().max(5, 'Maximum $5'),
-  currency: z.enum(['USD', 'INR']),
-});
+const PaymentSchema = z
+  .object({
+    amount: z.number().positive(),
+    currency: z.enum(['USD', 'INR']),
+  })
+  .superRefine((data, ctx) => {
+    if (data.currency === 'USD' && data.amount > 5) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        maximum: 5,
+        inclusive: true,
+        message: 'Maximum $5',
+        path: ['amount'],
+      });
+    }
+    if (data.currency === 'INR' && data.amount > 1000) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        maximum: 1000,
+        inclusive: true,
+        message: 'Maximum ₹1000',
+        path: ['amount'],
+      });
+    }
+  });
 type PaymentInput = z.infer<typeof PaymentSchema>;
 
 export default function BuyCoffeePage() {
   const { data: session, status } = useSession();
-  const [rate, setRate] = useState<number>(1);
   const [error, setError] = useState<string>('');
   const {
     register,
@@ -27,22 +47,6 @@ export default function BuyCoffeePage() {
   });
   const amount = watch('amount');
   const currency = watch('currency');
-
-  // fetch conversion rate to INR
-  useEffect(() => {
-    async function fetchRate() {
-      if (currency !== 'INR') {
-        const res = await fetch(`/api/payment/rate?base=${currency}&target=INR`);
-        const json = await res.json();
-        setRate(json.rate || 1);
-      } else {
-        setRate(1);
-      }
-    }
-    fetchRate();
-  }, [currency]);
-
-  const totalInINR = (amount * rate).toFixed(2);
 
   const onSubmit = async (data: PaymentInput) => {
     setError('');
@@ -112,7 +116,6 @@ export default function BuyCoffeePage() {
             <option value="INR">INR</option>
           </select>
         </div>
-        <p>Approx: ₹{totalInINR}</p>
         {error && <p className="text-red-500">{error}</p>}
         <button
           type="submit"

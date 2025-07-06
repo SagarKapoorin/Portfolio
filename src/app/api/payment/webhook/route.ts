@@ -19,33 +19,33 @@ export async function POST(req: Request) {
   let event: any;
   try {
     event = JSON.parse(bodyText);
+    console.log(bodyText)
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
-  const eventId = event.id as string;
-  const eventType = event.event as string;
+  const eventId = JSON.parse(JSON.stringify(event.payload.payment.entity)).order_id;
+  const eventType = event.event;
+  console.log(JSON.parse(JSON.stringify(event.payload.payment.entity)));
+  console.log('Received webhook event:', eventId);
   const existing = await prisma.webhookEvent.findUnique({ where: { id: eventId } });
   if (existing) {
     return NextResponse.json({ status: 'ignored' }, { status: 200 });
   }
   await prisma.webhookEvent.create({ data: { id: eventId, type: eventType } });
-  if (eventType === 'payment.captured' || eventType === 'payment.failed') {
-    const paymentEntity = event.payload.payment.entity;
+  if (eventType === 'payment.failed'|| eventType === 'order.paid') {
+    const paymentData = JSON.stringify(event.payload.payment.entity);
+    const paymentEntity = JSON.parse(paymentData);
     const orderId = paymentEntity.order_id as string;
     const paymentRec = await prisma.payment.findUnique({
       where: { razorpayOrderId: orderId },
       include: { user: true },
     });
     if (paymentRec && paymentRec.status === 'PENDING') {
-      const newStatus = eventType === 'payment.captured' ? 'COMPLETED' : 'FAILED';
+      const newStatus = (eventType === 'order.paid') ? 'COMPLETED' : 'FAILED';
       await prisma.payment.update({
         where: { id: paymentRec.id },
         data: { status: newStatus },
       });
-      await redis.publish(
-        'notifications',
-        JSON.stringify({ type: 'payment_' + newStatus.toLowerCase(), payload: { id: paymentRec.id, amount: paymentRec.amount, currency: paymentRec.currency, user_email: paymentRec.user.email } })
-      );
       try {
         await enqueueMailJob('payment-email', {
           userEmail: paymentRec.user.email,

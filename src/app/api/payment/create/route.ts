@@ -2,14 +2,35 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
-import { redis } from '@/lib/redis';
+// import { redis } from '@/lib/redis';  // no longer used in multi-currency setup
 import Razorpay from 'razorpay';
 import { z } from 'zod';
 
-const CreateOrderSchema = z.object({
-  amount: z.number().positive().max(5, 'Maximum $5'),
-  currency: z.enum(['USD', 'INR']),
-});
+const CreateOrderSchema = z
+  .object({
+    amount: z.number().positive(),
+    currency: z.enum(['USD', 'INR']),
+  })
+  .superRefine((data, ctx) => {
+    if (data.currency === 'USD' && data.amount > 5) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        maximum: 5,
+        inclusive: true,
+        message: 'Maximum $5',
+        path: ['amount'],
+      });
+    }
+    if (data.currency === 'INR' && data.amount > 1000) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        maximum: 1000,
+        inclusive: true,
+        message: 'Maximum ₹1000',
+        path: ['amount'],
+      });
+    }
+  });
 
 
 export async function POST(req: Request) {
@@ -23,19 +44,9 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
-  let inrAmount = amount;
-  if (currency !== 'INR') {
-    const cacheKey = `rate:${currency}:INR`;
-    let rate = await redis.get(cacheKey);
-    if (!rate) {
-      const res = await fetch(`https://api.exchangerate.host/latest?base=${currency}&symbols=INR`);
-      const data = await res.json();
-      rate = String(data.rates.INR || 1);
-      await redis.set(cacheKey, rate, { EX: 3600 });
-    }
-    inrAmount = amount * parseFloat(rate);
-  }
-  const amountInPaise = Math.round(inrAmount * 100);
+  // Calculate the amount in smallest currency unit (cents for USD, paise for INR)
+  const amountInSmallestUnit = Math.round(amount * 100);
+  const orderCurrency = currency;
 
   const payment = await prisma.payment.create({
     data: { amount, currency, user_id: user.id },
@@ -45,8 +56,8 @@ export async function POST(req: Request) {
     key_secret: process.env.RAZORPAY_KEY_SECRET!,
   });
   const order: any = await razorpay.orders.create({
-    amount: amountInPaise,
-    currency: 'INR',
+    amount: amountInSmallestUnit,
+    currency: orderCurrency,
     receipt: payment.id,
     payment_capture: true,
   });
