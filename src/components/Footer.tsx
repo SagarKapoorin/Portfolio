@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="hidden md:block"></div>
         </div>
 
-        <div className="mt-12 pt-8">
+        <div className="pt-8">
           <div className="flex flex-col md:flex-col justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm mb-4">
               ©{currentYear} Sagar Kapoor. All rights reserved.
