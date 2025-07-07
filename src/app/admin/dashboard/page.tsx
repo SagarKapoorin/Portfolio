@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Cards } from '@/components/Cards';
 import { useSession } from 'next-auth/react';
 
-// Data shapes for admin lists
 interface HireReq {
   id: string;
   title: string;
@@ -24,14 +25,11 @@ interface PayRec {
 export default function AdminDashboard() {
   const { data: session, status } = useSession({ required: true });
   const [tab, setTab] = useState<'hire' | 'payments'>('hire');
-  // Logged-in user email
   const userEmail = session?.user?.email || '';
-  // Hire requests state
   const [hireData, setHireData] = useState<HireReq[]>([]);
   const [hireMeta, setHireMeta] = useState({ total: 0, page: 1, perPage: 10, totalPages: 1 });
   const [hrStart, setHrStart] = useState('');
   const [hrEnd, setHrEnd] = useState('');
-  // Payments state
   const [payData, setPayData] = useState<PayRec[]>([]);
   const [payMeta, setPayMeta] = useState({ total: 0, page: 1, perPage: 10, totalPages: 1 });
   const [paySearch, setPaySearch] = useState('');
@@ -40,7 +38,6 @@ export default function AdminDashboard() {
   const [payEnd, setPayEnd] = useState('');
 
 
-  // Fetch hire requests when filters change
   useEffect(() => {
     if (status !== 'authenticated' || !userEmail) return;
     const qs = new URLSearchParams();
@@ -78,48 +75,53 @@ export default function AdminDashboard() {
 
 
   if (status === 'loading') return <p>Loading...</p>;
-  // Only admin can access
-  if (status === 'authenticated' && session?.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
-    return <p>Access denied</p>;
-  }
   return (
-    <div className="p-4">
-      <h1 className="text-2xl mb-4">Admin Dashboard</h1>
-      <div className="flex space-x-4 mb-4">
-        <button onClick={() => setTab('hire')} className={tab === 'hire' ? 'font-bold' : ''}>Hire Requests</button>
-        <button onClick={() => setTab('payments')} className={tab === 'payments' ? 'font-bold' : ''}>Payments</button>
+    <div className="p-8 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-white">Admin Dashboard</h1>
+      {/* Tabs */}
+      <div className="inline-flex bg-gray-800 rounded-lg overflow-hidden mb-6">
+        <button
+          onClick={() => setTab('hire')}
+          className={`px-5 py-2 text-sm font-medium transition-colors ${
+            tab === 'hire'
+              ? 'bg-indigo-600 text-white'
+              : 'text-gray-300 hover:bg-gray-700'
+          }`}
+        >
+          Hire Requests
+        </button>
+        <button
+          onClick={() => setTab('payments')}
+          className={`px-5 py-2 text-sm font-medium transition-colors ${
+            tab === 'payments'
+              ? 'bg-indigo-600 text-white'
+              : 'text-gray-300 hover:bg-gray-700'
+          }`}
+        >
+          Payments
+        </button>
       </div>
       {tab === 'hire' && (
-        <div>
+        <div className="p-4">
+          {/* Filters */}
           <div className="flex space-x-2 mb-2">
             <input type="date" value={hrStart} onChange={(e) => setHrStart(e.target.value)} className="border p-1" />
             <input type="date" value={hrEnd} onChange={(e) => setHrEnd(e.target.value)} className="border p-1" />
           </div>
-          <table className="min-w-full border">
-            <thead><tr>
-              <th className="border p-1">Title</th>
-              <th className="border p-1">User</th>
-              <th className="border p-1">Budget</th>
-              <th className="border p-1">Date</th>
-            </tr></thead>
-            <tbody>
-              {hireData.map((r) => (
-                <tr key={r.id}
-                  className="cursor-pointer"
-                  onClick={() =>
-                    alert(
-                      `Title: ${r.title}\nDetails: ${r.projectDetail}\nTime Period: ${r.timePeriod}`
-                    )
-                  }
-                >
-                  <td className="border p-1">{r.title}</td>
-                  <td className="border p-1">{r.userEmail}</td>
-                  <td className="border p-1">{r.budget}</td>
-                  <td className="border p-1">{new Date(r.createdAt).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Card list using Aceternity UI Cards component */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {hireData.map((r) => (
+              <Cards
+                key={r.id}
+                text={r.title}
+                desc={r.projectDetail}
+                type={r.userEmail}
+                link="#"
+                imglink="/start.webp"
+                tags={[`$${r.budget}`, r.timePeriod]}
+              />
+            ))}
+          </div>
           <div className="mt-2 flex justify-between">
             <button disabled={hireMeta.page <= 1} onClick={() => setHireMeta((m) => ({ ...m, page: m.page - 1 }))}>Prev</button>
             <span>Page {hireMeta.page} of {hireMeta.totalPages}</span>

@@ -6,8 +6,7 @@ import prisma from '@/lib/prisma';
 export async function GET(request: Request) {
   // Authenticate and authorize (admin only)
   const session = await getServerSession(authOptions);
-  const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
-  if (!session?.user?.email || session.user.email !== adminEmail) {
+  if (!session?.user?.email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
