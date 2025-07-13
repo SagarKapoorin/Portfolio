@@ -7,22 +7,38 @@ import type { Payment } from '@prisma/client';
 import React from 'react';
 import FilterForm from '@/components/FilterForm';
 interface Props {
-  searchParams: any;
+  // searchParams may be async, we await it before use
+  searchParams: Promise<Record<string, string | string[]>>;
 }
 
 export default async function PaymentsPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
-    redirect('/sign-in');
+    redirect('/signin');
   }
+  // Await search parameters before using
+  const sp = await searchParams;
   const userId = session.user.id;
-  const page = parseInt(searchParams.page || '1', 10);
-  // Ensure amountStr is a single string (take first if array)
-  const amountStr = Array.isArray(searchParams.amount)
-    ? searchParams.amount[0]
-    : searchParams.amount || '';
-  const start = searchParams.startDate ? new Date(searchParams.startDate) : null;
-  const end = searchParams.endDate ? new Date(searchParams.endDate) : null;
+  // Parse pagination
+  const pageParam = sp.page;
+  const page = parseInt(
+    Array.isArray(pageParam) ? pageParam[0] : pageParam || '1',
+    10
+  );
+  // Ensure amount is a single string
+  const amountParam = sp.amount;
+  const amountStr = Array.isArray(amountParam)
+    ? amountParam[0]
+    : amountParam || '';
+  // Date filters
+  const startParam = sp.startDate;
+  const start = startParam
+    ? new Date(Array.isArray(startParam) ? startParam[0] : startParam)
+    : null;
+  const endParam = sp.endDate;
+  const end = endParam
+    ? new Date(Array.isArray(endParam) ? endParam[0] : endParam)
+    : null;
   const limit = 10;
   const offset = (page - 1) * limit;
   const where: any = { user_id: userId };
@@ -106,16 +122,16 @@ export default async function PaymentsPage({ searchParams }: Props) {
                 params.set('amount', amountStr);
               }
               // Handle optional date filters (take first if array)
-              if (searchParams.startDate) {
-                const startDateParam = Array.isArray(searchParams.startDate)
-                  ? searchParams.startDate[0]
-                  : searchParams.startDate;
+              if (startParam) {
+                const startDateParam = Array.isArray(startParam)
+                  ? startParam[0]
+                  : startParam;
                 params.set('startDate', startDateParam);
               }
-              if (searchParams.endDate) {
-                const endDateParam = Array.isArray(searchParams.endDate)
-                  ? searchParams.endDate[0]
-                  : searchParams.endDate;
+              if (endParam) {
+                const endDateParam = Array.isArray(endParam)
+                  ? endParam[0]
+                  : endParam;
                 params.set('endDate', endDateParam);
               }
               params.set('page', String(num));

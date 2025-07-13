@@ -3,9 +3,13 @@ import React from 'react';
 import { Github, Linkedin, Twitter, Code2, Code, Instagram,X ,FileText  } from 'lucide-react';
 import { useState } from 'react';
 import Form from './Form';
+// Show social icons with optional contact form
+interface SocialMediaProps {
+  showContact?: boolean;
+}
 
-const SocialMedia = () => {
-  const [contact,useContact]=useState(true);
+const SocialMedia = ({ showContact = true }: SocialMediaProps) => {
+  const [contact, setContact] = useState(true);
   const socialLinks = [
     {
         name: 'Resume',
@@ -128,12 +132,13 @@ const SocialMedia = () => {
           ))}
         </div>
     
-     <div className="mt-20 text-center relative">
-     {!contact &&<Form/>}
+      {showContact && (
+        <div className="mt-20 text-center relative">
+          {!contact && <Form />}
           <a
-          onClick={(e) => {
-            e.preventDefault(); 
-            useContact(!contact);
+            onClick={(e) => {
+              e.preventDefault();
+              setContact(!contact);
           }}
       
             className="inline-block mt-6 px-8 py-4 rounded-2xl cursor-pointer bg-gradient-to-r from-cyan-500 via-pink-500 to-cyan-500 bg-300% 
@@ -142,7 +147,8 @@ const SocialMedia = () => {
           >
                {contact?"Or Send Me Direct Message":"Cancel"}
           </a>
-        </div>  
+        </div>
+      )}
       </div>
     </section>
   );

@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { Fragment } from 'react';
 import { Coffee, ChevronDown, ChevronUp } from 'lucide-react';
@@ -40,6 +41,7 @@ const PaymentSchema = z
 type PaymentInput = z.infer<typeof PaymentSchema>;
 
 export default function BuyCoffeePage() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const [error, setError] = useState<string>('');
   const {
@@ -103,8 +105,14 @@ export default function BuyCoffeePage() {
     rzp.open();
   };
 
+  // Redirect unauthenticated users to sign-in
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/signin');
+    }
+  }, [status, router]);
   if (status === 'loading') return <p>Loading...</p>;
-  if (!session) return <p>Please sign in to donate.</p>;
+  if (status === 'unauthenticated') return null;
 
   return (
     
