@@ -5,33 +5,58 @@ import prisma from '@/lib/prisma';
 import { redis } from '@/lib/redis';
 import type { Payment } from '@prisma/client';
 import React from 'react';
-
+import FilterForm from '@/components/FilterForm';
 interface Props {
-  searchParams: any;
+  // searchParams may be async, we await it before use
+  searchParams: Promise<Record<string, string | string[]>>;
 }
 
 export default async function PaymentsPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
-    redirect('/sign-in');
+    redirect('/signin');
   }
+  // Await search parameters before using
+  const sp = await searchParams;
   const userId = session.user.id;
-  const page = parseInt(searchParams.page || '1', 10);
-  const q = searchParams.q || '';
-  const start = searchParams.startDate ? new Date(searchParams.startDate) : null;
-  const end = searchParams.endDate ? new Date(searchParams.endDate) : null;
+  // Parse pagination
+  const pageParam = sp.page;
+  const page = parseInt(
+    Array.isArray(pageParam) ? pageParam[0] : pageParam || '1',
+    10
+  );
+  // Ensure amount is a single string
+  const amountParam = sp.amount;
+  const amountStr = Array.isArray(amountParam)
+    ? amountParam[0]
+    : amountParam || '';
+  // Date filters
+  const startParam = sp.startDate;
+  const start = startParam
+    ? new Date(Array.isArray(startParam) ? startParam[0] : startParam)
+    : null;
+  const endParam = sp.endDate;
+  const end = endParam
+    ? new Date(Array.isArray(endParam) ? endParam[0] : endParam)
+    : null;
   const limit = 10;
   const offset = (page - 1) * limit;
   const where: any = { user_id: userId };
-  if (q) where.id = { contains: q };
+  // Filter by amount if provided
+  if (amountStr) {
+    const parsed = parseFloat(amountStr);
+    if (!isNaN(parsed)) {
+      where.amount = parsed;
+    }
+  }
   if (start || end) {
     where.createdAt = {} as any;
     if (start) where.createdAt.gte = start;
     if (end) where.createdAt.lte = end;
   }
   // Cache keys
-  const keyList = `payments:list:${userId}:${q}:${start?.toISOString()||''}:${end?.toISOString()||''}:${page}`;
-  const keyCount = `payments:count:${userId}:${q}:${start?.toISOString()||''}:${end?.toISOString()||''}`;
+  const keyList = `payments:list:${userId}:${amountStr}:${start?.toISOString() || ''}:${end?.toISOString() || ''}:${page}`;
+  const keyCount = `payments:count:${userId}:${amountStr}:${start?.toISOString() || ''}:${end?.toISOString() || ''}`;
   // Try cache
   let payments: Payment[];
   let total;
@@ -54,64 +79,79 @@ export default async function PaymentsPage({ searchParams }: Props) {
     await redis.set(keyCount, String(total), { EX: 60 });
   }
   const totalPages = Math.ceil(total / limit);
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl mb-4">Payment History</h1>
-      <form method="get" className="mb-4 flex space-x-2">
-        <input name="q" defaultValue={q} placeholder="Search by ID" className="border p-1" />
-        <input
-          name="startDate"
-          type="date"
-          defaultValue={searchParams.startDate}
-          className="border p-1"
-        />
-        <input
-          name="endDate"
-          type="date"
-          defaultValue={searchParams.endDate}
-          className="border p-1"
-        />
-        <button type="submit" className="px-2 bg-blue-500 text-white">
-          Filter
-        </button>
-      </form>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <th className="border p-1">ID</th>
-            <th className="border p-1">Amount</th>
-            <th className="border p-1">Currency</th>
-            <th className="border p-1">Status</th>
-            <th className="border p-1">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.map((p: any) => (
-            <tr key={p.id}>
-              <td className="border p-1">{p.id}</td>
-              <td className="border p-1">{p.amount}</td>
-              <td className="border p-1">{p.currency}</td>
-              <td className="border p-1">{p.status}</td>
-              <td className="border p-1">{new Date(p.createdAt).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="mt-4 space-x-1">
-        {Array.from({ length: totalPages }).map((_, i) => {
-          const num = i + 1;
-          const params = new URLSearchParams(searchParams as any);
-          params.set('page', String(num));
-          return (
-            <a
-              key={num}
-              href={`/payments?${params.toString()}`}
-              className={num === page ? 'font-bold' : ''}
-            >
-              {num}
-            </a>
-          );
-        })}
+    <div className="relative flex flex-col min-h-screen">
+      <div className="relative z-10 max-w-4xl mx-auto p-6 space-y-6">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+          Payment History
+        </h1>
+        <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800">
+          <FilterForm />
+        </div>
+        <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800 overflow-x-auto">
+          <table className="w-full table-auto text-white">
+            <thead className="bg-zinc-800 text-zinc-400 uppercase text-sm">
+              <tr>
+                <th className="px-4 py-2">Amount</th>
+                <th className="px-4 py-2">Currency</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-700">
+              {payments.map((p: any) => (
+                <tr key={p.id} className="hover:bg-zinc-800/50">
+                  <td className="px-4 py-2">{p.amount}</td>
+                  <td className="px-4 py-2">{p.currency}</td>
+                  <td className="px-4 py-2 capitalize">{p.status}</td>
+                  <td className="px-4 py-2">{new Date(p.createdAt).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-center">
+          <nav className="flex space-x-2">
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const num = i + 1;
+              // Build query params for pagination, avoiding Symbol values
+              const params = new URLSearchParams();
+              // Preserve amount filter in pagination
+              if (amountStr) {
+                params.set('amount', amountStr);
+              }
+              // Handle optional date filters (take first if array)
+              if (startParam) {
+                const startDateParam = Array.isArray(startParam)
+                  ? startParam[0]
+                  : startParam;
+                params.set('startDate', startDateParam);
+              }
+              if (endParam) {
+                const endDateParam = Array.isArray(endParam)
+                  ? endParam[0]
+                  : endParam;
+                params.set('endDate', endDateParam);
+              }
+              params.set('page', String(num));
+              const isActive = num === page;
+              return (
+                <a
+                  key={num}
+                  href={`/payments?${params.toString()}`}
+                  className={
+                    isActive
+                      ? 'px-3 py-1 rounded-md bg-purple-600 text-white font-bold transition'
+                      : 'px-3 py-1 rounded-md bg-zinc-800 text-zinc-400 hover:bg-zinc-700 transition'
+                  }
+                >
+                  {num}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
       </div>
     </div>
   );

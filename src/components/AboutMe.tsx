@@ -52,7 +52,7 @@ export function AboutMe() {
      
     </div>
     <AnimatedTestimonials testimonials={testimonials} />
-    <SocialMedia/>
+    <SocialMedia showContact={false} />
 
   </>);
 }

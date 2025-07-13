@@ -4,6 +4,17 @@
 nextjs-portal {
   display: none;
 }
+
+/* Force dark styling for select dropdowns */
+select, select option {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+}
+select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
 @font-face {
   font-family: 'Doner'; /* General family name */
   src: url('../assets/fonts/Doner-RegularDisplay.otf') format('opentype'); /* Regular Display */
@@ -105,6 +116,15 @@ nextjs-portal {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+/* Dark-themed select dropdown options */
+@layer base {
+  select {
+    @apply bg-black/20 text-white;
+  }
+  select option {
+    @apply bg-black/20 text-white;
   }
 }
 @keyframes slideUp {

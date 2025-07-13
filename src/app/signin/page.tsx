@@ -10,6 +10,7 @@ import google from '@/assets/google.webp';
 import Image from "next/image";
 import { Github, LockKeyhole, Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { toast } from 'react-toastify';
 
 const loginSchema = z.object({
   email: z.string().email({
@@ -29,6 +30,13 @@ const registerSchema = loginSchema.extend({
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
+  // toast on successful login or registration
+  const handleSuccess = (message: string, url?: string) => {
+    toast.success(message);
+    if (url) {
+      setTimeout(() => router.push(url), 1000);
+    }
+  };
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -58,9 +66,9 @@ export default function Page() {
     });
     setIsLoading(false);
     if (res?.error) {
-      alert('Login failed: ' + res.error);
+      toast.error('Login failed: ' + res.error);
     } else {
-      router.push(res?.url || '/');
+      handleSuccess('Successfully signed in!', res?.url || '/');
     }
   };
   const onRegisterSubmit = async (values: z.infer<typeof registerSchema>) => {
@@ -74,9 +82,9 @@ export default function Page() {
     });
     setIsLoading(false);
     if (res?.error) {
-      alert('Registration failed: ' + res.error);
+      toast.error('Registration failed: ' + res.error);
     } else {
-      router.push(res?.url || '/');
+      handleSuccess('Account created successfully!', res?.url || '/');
     }
   };
 
