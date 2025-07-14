@@ -6,6 +6,8 @@ import Providers from '@/lib/providers';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Script from 'next/script';
+import PageLoader from '@/components/PageLoader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,25 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black antialiased`}
       >
+        {/* Page Loader */}
+        <PageLoader />
+        {/* Hide loader on page load */}
+        <Script id="hide-loader" strategy="beforeInteractive">
+          {`(function() {
+             function hideLoader() {
+               const loader = document.getElementById('page-loader');
+               if (!loader) return;
+               loader.style.transition = 'opacity 0.4s ease';
+               loader.style.opacity = '0';
+               setTimeout(() => loader.remove(), 400);
+             }
+             if (document.readyState === 'complete') {
+               hideLoader();
+             } else {
+               window.addEventListener('load', hideLoader);
+             }
+           })();`}
+        </Script>
         <Providers>
           <PostHogProvider>
             {/* Animated background on all pages */}
