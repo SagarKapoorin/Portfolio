@@ -2,7 +2,7 @@
 import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { LogOut } from 'lucide-react';
+import { LogOut, Download } from 'lucide-react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation'; 
@@ -14,6 +14,17 @@ const Header = () => {
 
   return (
     <StyledWrapper className="z-10 relative">
+      <div className="absolute left-4 top-4 z-20">
+        <a
+          href=""
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold rounded-lg px-4 py-2.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+        >
+          <Download className="w-5 h-5" />
+          <span className="font-medium">Download Resume</span>
+        </a>
+      </div>
       <div className="flex w-screen justify-center items-center z-10">
         <section>
           <label title="home" htmlFor="home" className="label" onClick={() => router.push('/')}>
@@ -97,7 +108,7 @@ const Header = () => {
               await signOut({ redirect: false });
               router.push('/');
             }}
-            className="ml-2 flex items-center space-x-1 px-3 py-1 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded"
+            className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>
