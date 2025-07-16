@@ -67,11 +67,13 @@ const Project = () => {
           </div>
         </div>
       </div>
-    <div className='flex flex-wrap justify-center items-start gap-16 h-full w-screen'>
-        <Cards text='2D-Multiverse' tags={technologies} imglink={img.src} desc='  As the name suggests, a small 2D-World of characters showcasing a comprehensive implementation of modern web technologies' link='https://github.com/SagarKapoorin/2d-Multiverse' type='Personal'/>
-        <Cards text='React-Games and Activities' tags={technologies2} imglink={img2.src} desc='Developed React Based Games and Activities during my Internship at WYB' link='https://link.wyb.social/dl/tt/H7GHM8' type='Corporate'/>
-        <Cards text='Socio-Pulse' tags={technologies3} imglink={img3.src} desc='SocialPulse is a vibrant social platform designed to bring people together, fostering meaningful connections and engaging interactions' link='https://github.com/SagarKapoorin/SocialPulse' type='Personal'/>
-      <Cards text='EduCrafter' tags={technologies4} imglink={img4.src} desc='Empower students with an interactive, all-in-one learning platform' link='https://github.com/SagarKapoorin/Student_Portal' type='Personal'/>
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <Cards text="2D-Multiverse" tags={technologies} imglink={img.src} desc="As the name suggests, a small 2D-World of characters showcasing a comprehensive implementation of modern web technologies" link="https://github.com/SagarKapoorin/2d-Multiverse" type="Personal" />
+        <Cards text="React-Games and Activities" tags={technologies2} imglink={img2.src} desc="Developed React Based Games and Activities during my Internship at WYB" link="https://link.wyb.social/dl/tt/H7GHM8" type="Corporate" />
+        <Cards text="Socio-Pulse" tags={technologies3} imglink={img3.src} desc="SocialPulse is a vibrant social platform designed to bring people together, fostering meaningful connections and engaging interactions" link="https://github.com/SagarKapoorin/SocialPulse" type="Personal" />
+        <Cards text="EduCrafter" tags={technologies4} imglink={img4.src} desc="Empower students with an interactive, all-in-one learning platform" link="https://github.com/SagarKapoorin/Student_Portal" type="Personal" />
+      </div>
     </div>
      <div className="h-32 bg-[#0d1117] flex items-center justify-center p-8 !pt-0">
      <a

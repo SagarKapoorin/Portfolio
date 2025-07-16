@@ -1,8 +1,8 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { LogOut, Download, LogIn } from 'lucide-react';
+import { LogOut, Download, LogIn, Menu, X, Home, User, Coffee, Briefcase, CreditCard } from 'lucide-react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation'; 
@@ -11,10 +11,90 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { data: session, status } = useSession();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <StyledWrapper className="z-10 relative">
-      <div className="absolute left-4 top-4 z-20">
+    <StyledWrapper className="relative z-[2000]">
+      {/* Mobile navigation toggle */}
+      {!sidebarOpen && (
+        <button
+          className="sm:hidden absolute left-4 top-4 z-20 p-1"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <Menu className="w-6 h-6 text-white" />
+        </button>
+      )}
+      {/* Mobile sidebar menu */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-[2100] flex">
+          <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
+          <div className="relative w-64 max-w-full h-full flex flex-col justify-between bg-black bg-opacity-60 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg animate-slideIn">
+            <div className="space-y-4">
+              <button className="mb-4 p-1 rounded-md" onClick={() => setSidebarOpen(false)}>
+              <X className="w-6 h-6 text-white" />
+            </button>
+            <nav className="flex flex-col space-y-2">
+              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/'); }}>
+                <Home className="w-5 h-5" />
+                <span>Home</span>
+              </button>
+              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/aboutme'); }}>
+                <User className="w-5 h-5" />
+                <span>About Me</span>
+              </button>
+              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/buy-coffee'); }}>
+                <Coffee className="w-5 h-5" />
+                <span>Buy Coffee</span>
+              </button>
+              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/hire'); }}>
+                <Briefcase className="w-5 h-5" />
+                <span>Hire</span>
+              </button>
+              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/payments'); }}>
+                <CreditCard className="w-5 h-5" />
+                <span>Payments</span>
+              </button>
+            </nav>
+            </div>
+            {/* Sidebar bottom actions */}
+            <div className="border-t border-white/20 pt-4 flex flex-col space-y-2">
+              <button
+                onClick={() => window.open('', '_blank')}
+                className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
+              >
+                <Download className="w-5 h-5" />
+                <span>Resume</span>
+              </button>
+              {status === 'authenticated' ? (
+                <button
+                  onClick={async () => {
+                    toast.success('Signed out');
+                    await signOut({ redirect: false });
+                    setSidebarOpen(false);
+                    router.push('/');
+                  }}
+                  className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Sign Out</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSidebarOpen(false);
+                    router.push('/signin');
+                  }}
+                  className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
+                >
+                  <LogIn className="w-5 h-5" />
+                  <span>Sign In</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="hidden sm:block absolute left-4 top-4 z-20">
         <a
           href=""
           target="_blank"
@@ -25,7 +105,7 @@ const Header = () => {
           <span className="font-medium">Download Resume</span>
         </a>
       </div>
-      <div className="flex w-screen justify-center items-center z-10">
+      <div className="hidden sm:flex w-full justify-center items-center z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <section>
           <label title="home" htmlFor="home" className="label" onClick={() => router.push('/')}>
             <input 
@@ -90,7 +170,7 @@ const Header = () => {
         </section>
       </div>
       {status === 'authenticated' && session?.user && (
-        <div className="absolute right-4 top-4 flex items-center space-x-2 z-10 bg-gray-800 bg-opacity-50 backdrop-blur-md p-2 rounded-full">
+        <div className="hidden sm:flex absolute right-4 top-4 flex items-center space-x-2 z-10 bg-gray-800 bg-opacity-50 backdrop-blur-md p-2 rounded-full">
           {session.user.image && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -112,17 +192,6 @@ const Header = () => {
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>
-          </button>
-        </div>
-      )}
-      {status === 'unauthenticated' && pathname !== '/signin' && (
-        <div className="absolute right-4 top-4 flex items-center space-x-2 z-10  bg-transparent backdrop-blur-md p-2 rounded-full">
-          <button
-            onClick={() => router.push('/signin')}
-            className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
-          >
-            <LogIn className="w-4 h-4" />
-            <span>Sign In</span>
           </button>
         </div>
       )}

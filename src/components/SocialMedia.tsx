@@ -101,7 +101,7 @@ const SocialMedia = ({ showContact = true }: SocialMediaProps) => {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group w-[340px] "
+              className="group w-full sm:w-[340px]"
             >
               <div className={`relative bg-white backdrop-blur-xl rounded-2xl p-6 
                 transform transition-all duration-500 hover:scale-105 

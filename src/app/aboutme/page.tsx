@@ -1,17 +1,13 @@
 "use client"
-import { AboutMe } from '@/components/AboutMe'
-import { AnimatedBackground } from '@/components/AnimatedBackground'
-import Header from '@/components/Header'
 import React from 'react'
-import Footer from '@/components/Footer'
+import { AboutMe } from '@/components/AboutMe'
 
 const page = () => {
 
   return (
-    <div className="bg-black min-h-screen w-screen transition-opacity duration-1000 ease-in-out opacity-1 animate-fadeIn">
-    <AnimatedBackground />
-    <AboutMe/>
-  </div>
+    <div className="min-h-screen w-full transition-opacity duration-1000 ease-in-out opacity-1 animate-fadeIn flex flex-col items-center">
+      <AboutMe />
+    </div>
   )
 }
 

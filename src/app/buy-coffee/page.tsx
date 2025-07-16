@@ -118,15 +118,15 @@ export default function BuyCoffeePage() {
     
     <div className="min-h-screen flex items-center justify-center p-6">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <div className="w-full max-w-xl bg-white/10 backdrop-blur-md rounded-3xl shadow-xl border border-white/20 p-8 flex flex-col items-center space-y-6">
+      <div className="w-full max-w-md sm:max-w-xl bg-white/10 backdrop-blur-md rounded-3xl shadow-xl border border-white/20 p-8 flex flex-col items-center space-y-8">
         <div className="flex items-center space-x-2">
           <Coffee className="w-8 h-8 text-yellow-300" />
           <h1 className="text-3xl font-bold text-white">Buy Me a Coffee</h1>
         </div>
         <p className="text-gray-300 text-center">Your support keeps me brewing and coding. Thank you!</p>
         <div className="text-white text-2xl font-semibold">{currency} {amount}</div>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
-          <div className="flex space-x-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+          <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 w-full">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-200 mb-1">Amount</label>
               <div className="relative">

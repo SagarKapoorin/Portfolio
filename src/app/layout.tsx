@@ -25,12 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <head>
+        {/* Responsive viewport meta */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href={logo.src} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-black antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-black antialiased overflow-x-hidden`}
       >
         {/* Page Loader */}
         <PageLoader />
@@ -62,9 +64,9 @@ export default function RootLayout({
               {/* Global header */}
               <Header />
               {/* Page content */}
-              <main className="flex-grow">
-                {children}
-              </main>
+            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8">
+              {children}
+            </main>
               {/* Global footer */}
               <Footer />
             </div>
