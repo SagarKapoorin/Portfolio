@@ -15,12 +15,8 @@ const Home = () => {
         <div className="w-screen">
           <MarqueeSection />
         </div>
-        <div className="w-full">
           <Project />
-        </div>
-        <div className="w-full">
           <Experience />
-        </div>
       </div>
   );
 };

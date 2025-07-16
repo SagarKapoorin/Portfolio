@@ -195,6 +195,18 @@ const Header = () => {
           </button>
         </div>
       )}
+      {/* Desktop sign-in button for unauthenticated users */}
+      {status === 'unauthenticated' && pathname !== '/signin' && (
+        <div className="hidden sm:flex absolute right-4 top-4 z-10">
+          <button
+            onClick={() => router.push('/signin')}
+            className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+          >
+            <LogIn className="w-4 h-4" />
+            <span>Sign In</span>
+          </button>
+        </div>
+      )}
     </StyledWrapper>
   );
 }
