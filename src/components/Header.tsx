@@ -2,7 +2,7 @@
 import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { LogOut, Download } from 'lucide-react';
+import { LogOut, Download, LogIn } from 'lucide-react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation'; 
@@ -112,6 +112,17 @@ const Header = () => {
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>
+          </button>
+        </div>
+      )}
+      {status === 'unauthenticated' && pathname !== '/signin' && (
+        <div className="absolute right-4 top-4 flex items-center space-x-2 z-10  bg-transparent backdrop-blur-md p-2 rounded-full">
+          <button
+            onClick={() => router.push('/signin')}
+            className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+          >
+            <LogIn className="w-4 h-4" />
+            <span>Sign In</span>
           </button>
         </div>
       )}

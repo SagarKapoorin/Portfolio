@@ -44,10 +44,13 @@ export default function RootLayout({
                loader.style.opacity = '0';
                setTimeout(() => loader.remove(), 400);
              }
+             const loaderDelay = 500;
              if (document.readyState === 'complete') {
-               hideLoader();
+               setTimeout(hideLoader, loaderDelay);
              } else {
-               window.addEventListener('load', hideLoader);
+               window.addEventListener('load', function() {
+                 setTimeout(hideLoader, loaderDelay);
+               });
              }
            })();`}
         </Script>
