@@ -34,13 +34,18 @@ export default {
        slideIn: {
          '0%': { transform: 'translateX(-100%)' },
          '100%': { transform: 'translateX(0)' },
+       },
+       slideOut: {
+         '0%': { transform: 'translateX(0)' },
+         '100%': { transform: 'translateX(-100%)' },
        }
 		},
 		animation: {
 			fadeIn: 'fadeIn 1s ease-in-out',
 			marquee: 'marquee var(--duration) infinite linear',
        'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
-       slideIn: 'slideIn 0.3s ease-out forwards'
+       slideIn: 'slideIn 0.3s ease-out forwards',
+       slideOut: 'slideOut 0.3s ease-in forwards'
 		},
   		screens: {
   			'max-sm': {

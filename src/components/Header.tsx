@@ -12,6 +12,15 @@ const Header = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setSidebarOpen(false);
+      setClosing(false);
+    }, 300);
+  };
 
   return (
     <StyledWrapper className="relative z-[2000]">
@@ -25,12 +34,12 @@ const Header = () => {
         </button>
       )}
       {/* Mobile sidebar menu */}
-      {sidebarOpen && (
+      {(sidebarOpen || closing) && (
         <div className="fixed inset-0 z-[2100] flex">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-          <div className="relative w-64 max-w-full h-full flex flex-col justify-between bg-black bg-opacity-60 backdrop-blur-md rounded-2xl p-6 border border-white/10 shadow-lg animate-slideIn">
+          <div className="fixed inset-0 bg-black/50" onClick={handleClose} />
+          <div className={`relative w-64 max-w-full h-full flex flex-col justify-between bg-black bg-opacity-60 backdrop-blur-md rounded-tr-2xl rounded-br-2xl p-6 border border-white/10 shadow-lg ${closing ? 'animate-slideOut' : 'animate-slideIn'}`}>
             <div className="space-y-4">
-              <button className="mb-4 p-1 rounded-md" onClick={() => setSidebarOpen(false)}>
+              <button className="mb-4 p-1 rounded-md" onClick={handleClose}>
               <X className="w-6 h-6 text-white" />
             </button>
             <nav className="flex flex-col space-y-2">
