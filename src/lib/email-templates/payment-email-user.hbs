@@ -1,11 +1,28 @@
-<html>
-  <body>
-    <p>Dear {{userEmail}},</p>
-    <p>We have received your payment successfully.</p>
-    <p>Details:</p>
-    <ul>
-      <li>Amount: {{paymentData.amount}} {{paymentData.currency}}</li>
-    </ul>
-    <p>Thank you for your support!</p>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Payment Confirmation</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,sans-serif;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color:#ffffff;margin:20px auto;border-collapse:collapse;border-radius:8px;overflow:hidden;">
+    <tr>
+      <td style="background-color:#111111;padding:20px;text-align:center;">
+        <h1 style="color:#ffffff;font-size:24px;margin:0;">Sagar Kapoor</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:20px;">
+        <p style="font-size:16px;color:#333333;margin-top:0;">Dear {{userEmail}},</p>
+        <p style="font-size:16px;color:#333333;">We have received your payment successfully.</p>
+        <p style="font-size:16px;color:#333333;">Details:</p>
+        <ul style="font-size:16px;color:#333333;padding-left:20px;">
+          <li><strong>Amount:</strong> {{paymentData.amount}} {{paymentData.currency}}</li>
+        </ul>
+        <p style="font-size:16px;color:#333333;">Thank you for your support!</p>
+        <p style="font-size:16px;color:#333333;">Best regards,<br/>Sagar Kapoor</p>
+      </td>
+    </tr>
+  </table>
+</body>
 </html>
