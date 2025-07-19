@@ -19,6 +19,8 @@ type HireInput = z.infer<typeof HireSchema>;
 export default function HirePage() {
   const { data: session, status } = useSession();
   const [available, setAvailable] = useState<boolean | null>(null);
+  const [used, setUsed] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(5);
   const {
     register,
     handleSubmit,
@@ -26,6 +28,7 @@ export default function HirePage() {
     reset,
   } = useForm<HireInput>({ resolver: zodResolver(HireSchema) });
 
+  // Submit hire request
   const onSubmit = async (data: HireInput) => {
     try {
       const res = await fetch('/api/hire', {
@@ -35,32 +38,56 @@ export default function HirePage() {
       });
       if (res.ok) {
         toast.success('Hire request sent successfully');
-        reset(); // clear form fields
+        reset();
+        // Refresh usage to update UI
+        await fetchStatus();
       } else {
-        const err = await res.text();
-        toast.error(`Failed to send hire request: ${err}`);
+        let message = 'Failed to send hire request';
+        try {
+          const { error } = await res.json();
+          if (error) message = error;
+        } catch {}
+        toast.error(message);
       }
     } catch (error: any) {
       toast.error(`Error: ${error.message}`);
     }
   };
 
-  // Fetch availability on mount
-  useEffect(() => {
-    async function fetchStatus() {
-      try {
-        const res = await fetch('/api/hire/status');
-        const json = await res.json();
-        setAvailable(json.available);
-      } catch {
-        setAvailable(false);
-      }
+  // Fetch availability and usage
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch('/api/hire/status');
+      const json = await res.json();
+      setAvailable(json.available);
+      setUsed(json.used ?? 0);
+      setLimit(json.limit ?? 5);
+    } catch {
+      setAvailable(false);
     }
+  };
+
+  useEffect(() => {
     fetchStatus();
   }, []);
   if (status === 'loading' || available === null) return <p>Loading...</p>;
   if (available === false) return <p>Currently not available for hire. Please check back later.</p>;
   if (!session) return <p>Please sign in to send a hire request.</p>;
+  if (used >= limit) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="bg-black/60 backdrop-blur-lg rounded-2xl shadow-xl p-8 max-w-md text-center">
+          <h2 className="text-2xl font-bold text-red-500 mb-4">Monthly Limit Reached</h2>
+          <p className="text-white mb-2">
+            You have reached the monthly limit of {limit} hire requests.
+          </p>
+          <p className="text-gray-400">
+            Please come back next month to send more requests.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-12 relative">
@@ -78,6 +105,9 @@ export default function HirePage() {
         <Heading heading="Hire Me" />
         <p className="text-center text-gray-300 mb-8">
           I’m available for freelance projects. Let’s build something awesome together!
+        </p>
+        <p className="text-center text-gray-400 mb-4">
+          Hire requests this month: {used}/{limit}
         </p>
         <div className="relative bg-black/60 backdrop-blur-lg rounded-2xl shadow-xl p-8 overflow-hidden">
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-indigo-600 to-purple-600 opacity-20 rounded-full blur-[100px]"></div>
