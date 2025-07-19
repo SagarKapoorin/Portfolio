@@ -5,7 +5,6 @@ nextjs-portal {
   display: none;
 }
 
-/* Force dark styling for select dropdowns */
 select, select option {
   background-color: rgba(0, 0, 0, 0.2) !important;
   color: #ffffff !important;
@@ -16,38 +15,38 @@ select {
   appearance: none !important;
 }
 @font-face {
-  font-family: 'Doner'; /* General family name */
-  src: url('../assets/fonts/Doner-RegularDisplay.otf') format('opentype'); /* Regular Display */
+  font-family: 'Doner'; 
+  src: url('../assets/fonts/Doner-RegularDisplay.otf') format('opentype'); 
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Doner'; /* General family name */
-  src: url('../assets/fonts/Doner-RegularDisplayItalic.otf') format('opentype'); /* Display Italic */
+  font-family: 'Doner'; 
+  src: url('../assets/fonts/Doner-RegularDisplayItalic.otf') format('opentype'); 
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'DonerText'; /* Specific name for text styles */
-  src: url('../assets/fonts/Doner-RegularText.otf') format('opentype'); /* Regular Text */
+  font-family: 'DonerText';
+  src: url('../assets/fonts/Doner-RegularText.otf') format('opentype'); 
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'DonerText'; /* Specific name for text styles */
-  src: url('../assets/fonts/Doner-RegularTextItalic.otf') format('opentype'); /* Text Italic */
+  font-family: 'DonerText'; 
+  src: url('../assets/fonts/Doner-RegularTextItalic.otf') format('opentype'); 
   font-weight: normal;
   font-style: italic;
 }
 
 .text-outline-double {
   text-shadow: 
-  2px 2px 0px white,     /* First white outline (small) */
-  -2px -2px 0px white,   /* First white outline (other side) */
-  4px 4px 0px black,     /* Second black outline (larger) */
+  2px 2px 0px white,     
+  -2px -2px 0px white,   
+  4px 4px 0px black,     
   -4px -4px 0px black;
 }
 .rfm-marquee-container{
@@ -118,7 +117,6 @@ select {
     @apply bg-background text-foreground;
   }
 }
-/* Dark-themed select dropdown options */
 @layer base {
   select {
     @apply bg-black/20 text-white;
@@ -127,7 +125,6 @@ select {
     @apply bg-black/20 text-white;
   }
 }
-/* Make date input calendar icon white */
 @layer base {
   input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1) brightness(1) !important;
@@ -152,7 +149,7 @@ select {
 .animation-kapoor {
   opacity: 0;
   display: inline-block;
-  animation: slideUp 1s ease-in-out 0.5s forwards; /* Delay for the second word */
+  animation: slideUp 1s ease-in-out 0.5s forwards; 
 }
 
 @keyframes gradient {
@@ -168,8 +165,7 @@ select {
 .bg-300\% {
   background-size: 300% 300%;
 }
-/* Custom Loader Animation (SAGAR) */
-/* Custom Loader Overlay */
+
 #page-loader {
   position: fixed;
   top: 0;

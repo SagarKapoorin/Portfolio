@@ -1,25 +1,25 @@
 "use client"
 import React from 'react';
-import { Github, Linkedin, Twitter, Code2, Code, Instagram,X ,FileText  } from 'lucide-react';
+import { Github, Linkedin, Code2, Code, Instagram,X ,FileText  } from 'lucide-react';
 import { useState } from 'react';
 import Form from './Form';
-// Show social icons with optional contact form
 interface SocialMediaProps {
   showContact?: boolean;
 }
 
 const SocialMedia = ({ showContact = true }: SocialMediaProps) => {
   const [contact, setContact] = useState(true);
+  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || '';
   const socialLinks = [
     {
-        name: 'Resume',
-        icon: <FileText className="w-8 h-8" />, 
-        url: 'https://drive.google.com/file/d/1w51uwLOzg7s4UEIxENLgn8T3MVmiI768/view?usp=sharing', 
-        color: 'group-hover:text-white',
-        default: 'text-purple-700',
-        stats: 'Full Stack Developer and Competitive Programmer', 
-       gradient: 'group-hover:from-[#9B4DCA]/90 group-hover:to-[#7B2CBF]/90'
-      },      
+      name: 'Resume',
+      icon: <FileText className="w-8 h-8" />,
+      url: resumeUrl,
+      color: 'group-hover:text-white',
+      default: 'text-purple-700',
+      stats: 'Full Stack Developer and Competitive Programmer',
+      gradient: 'group-hover:from-[#9B4DCA]/90 group-hover:to-[#7B2CBF]/90'
+    },
     {
       name: 'GitHub',
       icon: <Github className="w-8 h-8" />,
@@ -63,7 +63,7 @@ const SocialMedia = ({ showContact = true }: SocialMediaProps) => {
         url: 'https://codeforces.com/profile/BurningHash',
         color: 'group-hover:text-white',
         default: 'text-[#1f8acb]',
-        stats: 'Specialist (1433)',
+        stats: 'Specialist (1436)',
         gradient: 'group-hover:from-[#1f8acb]/90 group-hover:to-[#1855b3]/90'
       },
     {
@@ -72,7 +72,7 @@ const SocialMedia = ({ showContact = true }: SocialMediaProps) => {
       url: 'https://leetcode.com/SagarKa/',
       color: 'group-hover:text-white',
       default: 'text-[#ffa116]',
-      stats: '1836 Rating',
+      stats: '1931 Rating',
       gradient: 'group-hover:from-[#ffa116]/90 group-hover:to-[#ffa116]/90'
     }
   ];

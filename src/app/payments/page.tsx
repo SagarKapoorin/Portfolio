@@ -7,7 +7,6 @@ import type { Payment } from '@prisma/client';
 import React from 'react';
 import FilterForm from '@/components/FilterForm';
 interface Props {
-  // searchParams may be async, we await it before use
   searchParams: Promise<Record<string, string | string[]>>;
 }
 
@@ -16,21 +15,17 @@ export default async function PaymentsPage({ searchParams }: Props) {
   if (!session?.user?.email) {
     redirect('/signin');
   }
-  // Await search parameters before using
   const sp = await searchParams;
   const userId = session.user.id;
-  // Parse pagination
   const pageParam = sp.page;
   const page = parseInt(
     Array.isArray(pageParam) ? pageParam[0] : pageParam || '1',
     10
   );
-  // Ensure amount is a single string
   const amountParam = sp.amount;
   const amountStr = Array.isArray(amountParam)
     ? amountParam[0]
     : amountParam || '';
-  // Date filters
   const startParam = sp.startDate;
   const start = startParam
     ? new Date(Array.isArray(startParam) ? startParam[0] : startParam)
@@ -42,7 +37,6 @@ export default async function PaymentsPage({ searchParams }: Props) {
   const limit = 10;
   const offset = (page - 1) * limit;
   const where: any = { user_id: userId };
-  // Filter by amount if provided
   if (amountStr) {
     const parsed = parseFloat(amountStr);
     if (!isNaN(parsed)) {
@@ -54,10 +48,8 @@ export default async function PaymentsPage({ searchParams }: Props) {
     if (start) where.createdAt.gte = start;
     if (end) where.createdAt.lte = end;
   }
-  // Cache keys
   const keyList = `payments:list:${userId}:${amountStr}:${start?.toISOString() || ''}:${end?.toISOString() || ''}:${page}`;
   const keyCount = `payments:count:${userId}:${amountStr}:${start?.toISOString() || ''}:${end?.toISOString() || ''}`;
-  // Try cache
   let payments: Payment[];
   let total;
   const cachedList = await redis.get(keyList);
@@ -117,13 +109,10 @@ export default async function PaymentsPage({ searchParams }: Props) {
           <nav className="flex flex-wrap justify-center gap-2">
             {Array.from({ length: totalPages }).map((_, i) => {
               const num = i + 1;
-              // Build query params for pagination, avoiding Symbol values
               const params = new URLSearchParams();
-              // Preserve amount filter in pagination
               if (amountStr) {
                 params.set('amount', amountStr);
               }
-              // Handle optional date filters (take first if array)
               if (startParam) {
                 const startDateParam = Array.isArray(startParam)
                   ? startParam[0]

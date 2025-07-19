@@ -73,7 +73,6 @@ export default function BuyCoffeePage() {
       return;
     }
     const { order, key } = json;
-  // TODO: replace `any` with proper Razorpay options type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options: any = {
       key,
@@ -105,7 +104,6 @@ export default function BuyCoffeePage() {
     rzp.open();
   };
 
-  // Redirect unauthenticated users to sign-in
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/signin');

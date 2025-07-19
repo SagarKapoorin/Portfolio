@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
-import { redis } from '@/lib/redis';
 import { z } from 'zod';
-import { enqueueMailJob } from '@/lib/queue';
+import { enqueueMailJob, enqueueNotificationJob } from '@/lib/queue';
 
 const HireSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -25,16 +24,35 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const requestsThisMonth = await prisma.hireRequest.count({
+    where: {
+      user_id: user.id,
+      createdAt: { gte: startOfMonth },
+    },
+  });
+  const MAX_REQUESTS_PER_MONTH = 5;
+  if (requestsThisMonth >= MAX_REQUESTS_PER_MONTH) {
+    return NextResponse.json(
+      { error: `Monthly hire request limit of ${MAX_REQUESTS_PER_MONTH} reached` },
+      { status: 429 }
+    );
+  }
   const newRequest = await prisma.hireRequest.create({
     data: { title, budget, projectDetail, timePeriod, user_id: user.id },
   });
-  await redis.publish(
-    'notifications',
-    JSON.stringify({
-      type: 'new_message',
-      payload: { id: newRequest.id, title, budget, projectDetail, timePeriod, user_email: user.email },
-    })
-  );
+  await enqueueNotificationJob({
+    type: 'new_message',
+    payload: {
+      id: newRequest.id,
+      title,
+      budget,
+      projectDetail,
+      timePeriod,
+      user_email: user.email,
+    },
+  });
   try {
     await enqueueMailJob('hire-email', {
       userEmail: session.user.email,

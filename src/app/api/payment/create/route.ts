@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
-// import { redis } from '@/lib/redis';  // no longer used in multi-currency setup
 import Razorpay from 'razorpay';
 import { z } from 'zod';
 
@@ -46,7 +45,6 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
-  // Calculate the amount in smallest currency unit (cents for USD, paise for INR)
   const amountInSmallestUnit = Math.round(amount * 100);
   const orderCurrency = currency;
 

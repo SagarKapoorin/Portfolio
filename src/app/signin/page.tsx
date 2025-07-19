@@ -30,7 +30,6 @@ const registerSchema = loginSchema.extend({
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
-  // toast on successful login or registration
   const handleSuccess = (message: string, url?: string) => {
     toast.success(message);
     if (url) {

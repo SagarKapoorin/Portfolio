@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { toast } from 'react-toastify';
 import { LogOut, Download, LogIn, Menu, X, Home, User, Coffee, Briefcase, CreditCard } from 'lucide-react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
@@ -78,11 +77,9 @@ const Header = () => {
               </button>
               {status === 'authenticated' ? (
                 <button
-                  onClick={async () => {
-                    toast.success('Signed out');
-                    await signOut({ redirect: false });
+                  onClick={() => {
                     setSidebarOpen(false);
-                    router.push('/');
+                    signOut({ callbackUrl: '/' });
                   }}
                   className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
                 >
@@ -184,11 +181,7 @@ const Header = () => {
             {session.user.name || session.user.email}
           </span>
           <button
-            onClick={async () => {
-              toast.success('Successfully signed out');
-              await signOut({ redirect: false });
-              router.push('/');
-            }}
+            onClick={() => signOut({ callbackUrl: '/' })}
             className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
           >
             <LogOut className="w-4 h-4" />

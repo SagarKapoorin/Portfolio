@@ -7,12 +7,10 @@ import handlebars from 'handlebars';
 import mjml2html from 'mjml';
 
 
-// Sender address and base URL for links
 const fromAddress = process.env.EMAIL_FROM;
 const baseUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://sagarkapoor.com';
 const templatesDir = path.resolve(process.cwd(), 'src/lib/email-templates');
 const emailTemplates: Record<string, handlebars.TemplateDelegate> = {};
-// Load MJML templates and compile with Handlebars
 fs.readdirSync(templatesDir).forEach((file) => {
   if (file.endsWith('.mjml')) {
     const name = path.basename(file, '.mjml');
@@ -21,9 +19,7 @@ fs.readdirSync(templatesDir).forEach((file) => {
   }
 });
 
-/**
- * Render and compile an MJML template to HTML
- */
+
 function compileEmail(name: string, data: any) {
   const mjmlContent = emailTemplates[name](data);
   const { html, errors } = mjml2html(mjmlContent, { validationLevel: 'strict' });
@@ -51,7 +47,6 @@ async function processQueue() {
           subject: 'Payment Completed',
           html: compileEmail('payment-email-admin', { userEmail, paymentData, year, baseUrl }),
         });
-        // User confirmation
         await transporter.sendMail({
           from: fromAddress,
           to: userEmail,
@@ -61,14 +56,12 @@ async function processQueue() {
       } else if (name === 'hire-email') {
         const { userEmail, title, budget, projectDetail, timePeriod } = data;
         const year = new Date().getFullYear();
-        // Admin notification
         await transporter.sendMail({
           from: fromAddress,
           to: process.env.ADMIN_EMAIL,
           subject: `Hire Request: ${title}`,
           html: compileEmail('hire-email-admin', { userEmail, title, budget, projectDetail, timePeriod, year, baseUrl }),
         });
-        // User confirmation
         await transporter.sendMail({
           from: fromAddress,
           to: userEmail,
