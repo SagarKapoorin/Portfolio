@@ -1,0 +1,47 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" />
+      <mj-text align="center" font-size="16px" color="#333333" />
+      <mj-section padding="0px" />
+      <mj-button background-color="#7e5bef" color="#ffffff" font-size="16px" border-radius="4px" padding="12px 24px" />
+      <mj-navbar-link padding="0 12px" color="#ffffff" font-size="14px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .header-links a { color: #ffffff !important; text-decoration: none !important; margin: 0 8px; white-space: nowrap !important; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#f4f4f4">
+    <!-- Header -->
+    <mj-section background-color="#111111" padding="20px">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="24px" font-weight="bold">Sagar Kapoor</mj-text>
+        <mj-text align="center" color="#ffffff" font-size="14px" css-class="header-links">
+          <a href="{{baseUrl}}">Home</a>
+          <a href="{{baseUrl}}/aboutme">About Me</a>
+          <a href="{{baseUrl}}/hire">Hire</a>
+          <a href="{{baseUrl}}/payments">Payments</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- Body -->
+    <mj-section background-color="#ffffff" padding="20px">
+      <mj-column>
+        <mj-text font-size="20px" font-weight="bold" color="#000000">Payment Completed</mj-text>
+        <mj-text>User {{userEmail}} has completed a payment:</mj-text>
+        <mj-text padding="0px" line-height="1.5">
+          • Amount: {{paymentData.amount}} {{paymentData.currency}}<br/>
+          • Payment ID: {{paymentData.id}}
+        </mj-text>
+        <mj-text>Thank you.</mj-text>
+        <mj-button href="{{baseUrl}}/admin/payments" align="center">View in Admin Dashboard</mj-button>
+      </mj-column>
+    </mj-section>
+    <!-- Footer -->
+    <mj-section background-color="#111111" padding="10px">
+      <mj-column>
+        <mj-text align="center" color="#cccccc" font-size="12px">©{{year}} Sagar Kapoor. All rights reserved.</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
