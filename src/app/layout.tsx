@@ -28,16 +28,13 @@ export default function RootLayout({
     <html lang="en" className="overflow-x-hidden">
       <head>
         <title>Sagar Kapoor</title>
-        {/* Responsive viewport meta */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href={logo.src} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black antialiased overflow-x-hidden`}
       >
-        {/* Page Loader */}
         <PageLoader />
-        {/* Hide loader on page load */}
         <Script id="hide-loader" strategy="beforeInteractive">
           {`(function() {
              function hideLoader() {
@@ -59,16 +56,12 @@ export default function RootLayout({
         </Script>
         <Providers>
           <PostHogProvider>
-            {/* Animated background on all pages */}
             <AnimatedBackground />
             <div className="relative z-10 flex flex-col min-h-screen">
-              {/* Global header */}
               <Header />
-              {/* Page content */}
             <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8">
               {children}
             </main>
-              {/* Global footer */}
               <Footer />
             </div>
           </PostHogProvider>

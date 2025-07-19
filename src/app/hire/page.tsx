@@ -91,7 +91,6 @@ export default function HirePage() {
 
   return (
     <div className="py-12 relative">
-      {/* User avatar in top-right when signed in */}
       {session?.user?.image && (
         <div className="absolute top-4 right-4">
           <img

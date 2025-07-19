@@ -24,7 +24,6 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
-  // Rate limit: max 5 hire requests per month per user
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const requestsThisMonth = await prisma.hireRequest.count({
@@ -43,7 +42,6 @@ export async function POST(req: Request) {
   const newRequest = await prisma.hireRequest.create({
     data: { title, budget, projectDetail, timePeriod, user_id: user.id },
   });
-  // Enqueue notification job via Redis list rather than using pub/sub
   await enqueueNotificationJob({
     type: 'new_message',
     payload: {

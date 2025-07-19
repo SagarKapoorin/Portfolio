@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import { redis } from '@/lib/redis';
 
-/**
- * GET /api/payment/rate?base=USD&target=INR
- * Returns the exchange rate from base to target currency.
- */
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -14,7 +10,6 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Missing base or target parameter' }, { status: 400 });
     }
     const cacheKey = `rate:${base}:${target}`;
-    // Try cache
     let rateStr = await redis.get(cacheKey);
     if (!rateStr) {
       const res = await fetch(
@@ -29,7 +24,6 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: 'Invalid rate data' }, { status: 502 });
       }
       rateStr = String(rate);
-      // Cache for 1 hour
       await redis.set(cacheKey, rateStr, { EX: 3600 });
     }
     const rate = parseFloat(rateStr);

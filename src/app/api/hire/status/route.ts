@@ -10,7 +10,6 @@ export async function GET() {
     create: { available: true },
   });
   const response: any = { available: status.available };
-  // Include user hire request usage if authenticated
   const session = await getServerSession(authOptions);
   if (session?.user?.email) {
     const user = await prisma.user.findUnique({ where: { email: session.user.email } });

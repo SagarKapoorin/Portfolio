@@ -4,23 +4,19 @@ import { authOptions } from '../../auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: Request) {
-  // Authenticate and authorize (admin only)
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Parse query parameters
   const url = new URL(request.url);
   const page = Math.max(parseInt(url.searchParams.get('page') || '1', 10), 1);
-  const perPage = 10; // fixed 10 rows per page
-  // For payment search, filter by amount
+  const perPage = 10; 
   const amountStr = url.searchParams.get('amount')?.trim() || '';
   const statusFilter = url.searchParams.get('status')?.toUpperCase() || '';
   const startDate = url.searchParams.get('startDate');
   const endDate = url.searchParams.get('endDate');
 
-  // Use logged-in user's email for filtering
   const userEmail = session.user.email;
   const where: any = { user: { email: userEmail } };
   if (amountStr) {
@@ -32,7 +28,6 @@ export async function GET(request: Request) {
   if (statusFilter) {
     where.status = statusFilter;
   } else {
-    // Exclude pending payments by default
     where.status = { not: 'PENDING' };
   }
   if (startDate || endDate) {
@@ -47,9 +42,7 @@ export async function GET(request: Request) {
     }
   }
 
-  // Get total count
   const total = await prisma.payment.count({ where });
-  // Fetch paginated data
   const payments = await prisma.payment.findMany({
     where,
     include: { user: { select: { email: true } } },
@@ -58,7 +51,6 @@ export async function GET(request: Request) {
     take: perPage,
   });
 
-  // Build response
   const totalPages = Math.ceil(total / perPage) || 1;
   return NextResponse.json(
     {
