@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-# import { toast } from 'react-toastify'; // removed unused import
 import { LogOut, Download, LogIn, Menu, X, Home, User, Coffee, Briefcase, CreditCard } from 'lucide-react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
