@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { Cards } from '@/components/Cards';
 import img from '@/assets/Screenshot 2024-12-16 131253.webp';
-import img2 from '@/assets/wyb.webp';
+import img2 from '@/assets/portfolio.webp';
 import img3 from '@/assets/Screenshot 2024-12-16 144413.webp';
 import img4 from '@/assets/Screenshot 2024-12-16 110927.webp';
-import { Code2 } from 'lucide-react';
 
 const Project = () => {
     const technologies = [
@@ -22,13 +22,15 @@ const Project = () => {
         "Jest"
       ];
       const technologies2 = [
+        "Next.js",
+        "TypeScript",
         "React",
-        "Redux",
-        "Material UI",
+        "Redis",
+        "PostgreSQL",
+        "Prisma",
         "Tailwind CSS",
-        "Canvas",
-        "Javscript"
-      ];
+        "Framer Motion"
+        ];
       const technologies3 = [
         "React.js",
         "Redux.js Toolkit",
@@ -49,6 +51,10 @@ const Project = () => {
         "EJS"
     ];
     const [isHovered, setIsHovered] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState('');
+    useEffect(() => {
+      setCurrentUrl(window.location.href);
+    }, []);
   return (
     <div>
 
@@ -67,13 +73,20 @@ const Project = () => {
           </div>
         </div>
       </div>
-    <div className='flex flex-wrap justify-center items-start gap-16 h-full w-screen'>
+  <div className='flex flex-wrap justify-center items-start gap-16 h-full w-screen'>
         <Cards text='2D-Multiverse' tags={technologies} imglink={img.src} desc='  As the name suggests, a small 2D-World of characters showcasing a comprehensive implementation of modern web technologies' link='https://github.com/SagarKapoorin/2d-Multiverse' type='Personal'/>
-        <Cards text='React-Games and Activities' tags={technologies2} imglink={img2.src} desc='Developed React Based Games and Activities during my Internship at WYB' link='https://link.wyb.social/dl/tt/H7GHM8' type='Corporate'/>
+        <Cards
+          text='Portfolio'
+          tags={technologies2}
+          imglink={img2.src}
+          desc='Personal portfolio website showcasing my projects and blogs, built with Next.js, TypeScript, Tailwind CSS, and Framer Motion'
+          link={currentUrl}
+          type='Personal'
+        />
         <Cards text='Socio-Pulse' tags={technologies3} imglink={img3.src} desc='SocialPulse is a vibrant social platform designed to bring people together, fostering meaningful connections and engaging interactions' link='https://github.com/SagarKapoorin/SocialPulse' type='Personal'/>
       <Cards text='EduCrafter' tags={technologies4} imglink={img4.src} desc='Empower students with an interactive, all-in-one learning platform' link='https://github.com/SagarKapoorin/Student_Portal' type='Personal'/>
-    </div>
-     <div className="h-32 bg-[#0d1117] flex items-center justify-center p-8 !pt-0">
+      </div>
+     <div className="h-32 flex items-center justify-center p-8 !pt-0">
      <a
        href="https://github.com/SagarKapoorin/"
        target="_blank"

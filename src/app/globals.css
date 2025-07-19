@@ -127,6 +127,12 @@ select {
     @apply bg-black/20 text-white;
   }
 }
+/* Make date input calendar icon white */
+@layer base {
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1) !important;
+  }
+}
 @keyframes slideUp {
   0% {
     transform: translateY(100%);

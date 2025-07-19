@@ -82,15 +82,16 @@ export default async function PaymentsPage({ searchParams }: Props) {
 
   return (
     <div className="relative flex flex-col min-h-screen">
-      <div className="relative z-10 max-w-4xl mx-auto p-6 space-y-6">
+      <div className="relative z-10 max-w-4xl mx-auto p-6 space-y-6 w-full">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
           Payment History
         </h1>
         <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800">
           <FilterForm />
         </div>
-        <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800 overflow-x-auto">
-          <table className="w-full table-auto text-white">
+        <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800">
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto text-white">
             <thead className="bg-zinc-800 text-zinc-400 uppercase text-sm">
               <tr>
                 <th className="px-4 py-2">Amount</th>
@@ -111,8 +112,9 @@ export default async function PaymentsPage({ searchParams }: Props) {
             </tbody>
           </table>
         </div>
+        </div>
         <div className="flex justify-center">
-          <nav className="flex space-x-2">
+          <nav className="flex flex-wrap justify-center gap-2">
             {Array.from({ length: totalPages }).map((_, i) => {
               const num = i + 1;
               // Build query params for pagination, avoiding Symbol values

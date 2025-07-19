@@ -116,17 +116,17 @@ export default function BuyCoffeePage() {
 
   return (
     
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:p-6">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <div className="w-full max-w-xl bg-white/10 backdrop-blur-md rounded-3xl shadow-xl border border-white/20 p-8 flex flex-col items-center space-y-6">
+      <div className="w-full max-w-md sm:max-w-xl bg-white/10 backdrop-blur-md rounded-3xl shadow-xl border border-white/20 p-6 sm:p-8 flex flex-col items-center space-y-8">
         <div className="flex items-center space-x-2">
           <Coffee className="w-8 h-8 text-yellow-300" />
-          <h1 className="text-3xl font-bold text-white">Buy Me a Coffee</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white whitespace-nowrap">Buy Me a Coffee</h1>
         </div>
         <p className="text-gray-300 text-center">Your support keeps me brewing and coding. Thank you!</p>
         <div className="text-white text-2xl font-semibold">{currency} {amount}</div>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
-          <div className="flex space-x-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+          <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 w-full">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-200 mb-1">Amount</label>
               <div className="relative">
@@ -147,7 +147,7 @@ export default function BuyCoffeePage() {
               </div>
               {errors.amount && <p className="text-yellow-300 text-sm mt-1">{errors.amount.message}</p>}
             </div>
-            <div className="w-32 relative flex justify-center items-end">
+            <div className="w-full sm:w-32 relative flex justify-start sm:justify-center items-end">
               <Listbox value={currency} onChange={(val) => setValue('currency', val)}>
               <Listbox.Button className="w-full bg-black/20 text-white rounded-lg px-3 py-2 flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-yellow-400">
                 <span>{currency}</span>
@@ -159,7 +159,7 @@ export default function BuyCoffeePage() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className="absolute mt-1 w-32 bg-black/80 text-white rounded-lg py-1 z-50 shadow-lg">
+                <Listbox.Options className="absolute mt-1 w-full sm:w-32 bg-black/80 text-white rounded-lg py-1 z-50 shadow-lg">
                 {['USD','INR'].map((opt) => (
                   <Listbox.Option
                   key={opt}
