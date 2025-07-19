@@ -13,6 +13,8 @@ const Header = () => {
   const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [closing, setClosing] = useState(false);
+  // Resume URL from environment variable
+  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || '';
 
   const handleClose = () => {
     setClosing(true);
@@ -68,7 +70,7 @@ const Header = () => {
             {/* Sidebar bottom actions */}
             <div className="border-t border-white/20 pt-4 flex flex-col space-y-2">
               <button
-                onClick={() => window.open('', '_blank')}
+                onClick={() => window.open(resumeUrl, '_blank')}
                 className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
               >
                 <Download className="w-5 h-5" />
@@ -105,7 +107,7 @@ const Header = () => {
       )}
       <div className="hidden sm:block absolute left-4 top-4 z-20">
         <a
-          href=""
+          href={resumeUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold rounded-lg px-4 py-2.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
