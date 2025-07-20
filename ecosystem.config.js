@@ -6,7 +6,7 @@ module.exports = {
   apps: [
     {
       name: 'portfolio-app',
-      script: 'npm',
+      script: './node_modules/next/dist/bin/next',
       args: 'start',
       exec_mode: 'cluster',
       instances: 'max',
@@ -16,13 +16,9 @@ module.exports = {
     },
     {
       name: 'portfolio-worker',
-      script: 'npm',
-      args: 'run worker',
+      script: 'src/lib/worker-runner.js',
       exec_mode: 'fork',
-      instances: 1,
-      env: {
-        NODE_ENV: 'production',
-      },
-    },
+      instances: 1
+    }
   ],
 };
