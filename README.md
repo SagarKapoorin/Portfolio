@@ -1,4 +1,4 @@
-# Sagar Kapoor Project
+# Sagar Kapoor Portfolio
 
 Live Demo: https://sagar-ntho.onrender.com
 
@@ -151,4 +151,4 @@ docker-compose up --build -d
 
 - Live Demo: https://sagar-ntho.onrender.com
 - Author: Sagar Kapoor
-- Email: see `ADMIN_EMAIL` or via site contact form
+- Email: sagarbadal70@gmail.com
