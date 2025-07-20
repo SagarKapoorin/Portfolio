@@ -14,11 +14,5 @@ module.exports = {
         NODE_ENV: 'production',
       },
     },
-    {
-      name: 'portfolio-worker',
-      script: 'src/lib/worker-runner.js',
-      exec_mode: 'fork',
-      instances: 1
-    }
   ],
 };

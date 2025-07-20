@@ -17,10 +17,14 @@ Run the Next.js server:
 npm start
 ```
 
-Run the background worker:
+Worker API endpoint:
 
 ```bash
-npm run worker
+# Check endpoint availability
+curl http://localhost:3000/api/worker
+
+# Process queued emails
+curl -X POST http://localhost:3000/api/worker
 ```
  
 ## Docker
