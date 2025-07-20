@@ -8,8 +8,7 @@ module.exports = {
       name: 'portfolio-app',
       script: './node_modules/next/dist/bin/next',
       args: 'start',
-      exec_mode: 'cluster',
-      instances: 'max',
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
       },
