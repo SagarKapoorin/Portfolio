@@ -52,7 +52,7 @@ Access the app at http://localhost:3000, Redis on 6379, and Postgres on 5432.
 On Vercel you can run the mail queue processor as a scheduled function (cron).  Add a `vercel.json` at the project root:
 ```json
 {
-  "version": 3,
+  "version": 2,
   "crons": [
     { "path": "/api/cron-mail", "schedule": "0 */6 * * *" }
   ]
