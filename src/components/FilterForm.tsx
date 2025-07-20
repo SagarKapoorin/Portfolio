@@ -12,6 +12,9 @@ export default function FilterForm() {
   const [amount, setAmount] = useState(initialAmount);
   const [startDate, setStartDate] = useState(initialStart);
   const [endDate, setEndDate] = useState(initialEnd);
+  // Toggle input type to show placeholder text when empty, switch to date picker on focus
+  const [startType, setStartType] = useState(initialStart ? 'date' : 'text');
+  const [endType, setEndType] = useState(initialEnd ? 'date' : 'text');
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -35,9 +38,11 @@ export default function FilterForm() {
       <div className="relative w-full sm:w-auto">
         <input
           name="startDate"
-          type="date"
+          type={startType}
           placeholder="DD-MM-YYYY"
           value={startDate}
+          onFocus={() => setStartType('date')}
+          onBlur={() => setStartType(startDate ? 'date' : 'text')}
           onChange={(e) => setStartDate(e.target.value)}
           className="w-full sm:w-auto px-3 py-2 pr-10 bg-zinc-800/70 rounded-md border border-zinc-700 text-white placeholder-zinc-500 focus:ring-2 focus:ring-purple-400 focus:border-transparent transition"
         />
@@ -46,9 +51,11 @@ export default function FilterForm() {
       <div className="relative w-full sm:w-auto">
         <input
           name="endDate"
-          type="date"
+          type={endType}
           placeholder="DD-MM-YYYY"
           value={endDate}
+          onFocus={() => setEndType('date')}
+          onBlur={() => setEndType(endDate ? 'date' : 'text')}
           onChange={(e) => setEndDate(e.target.value)}
           className="w-full sm:w-auto px-3 py-2 pr-10 bg-zinc-800/70 rounded-md border border-zinc-700 text-white placeholder-zinc-500 focus:ring-2 focus:ring-purple-400 focus:border-transparent transition"
         />
