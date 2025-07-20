@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 /** GET /api/worker
  * Health check / usage information
  */
-export async function GET() {
+export async function POST() {
   return NextResponse.json({
     success: true,
     message: 'Worker endpoint. Use POST to process mail queue.',
@@ -13,7 +13,7 @@ export async function GET() {
 /** POST /api/worker
  * Drain and process all queued mail jobs.
  */
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   try {
     console.log('hitting');
     const { drainMailQueue } = await import('@/lib/mail-processor');
