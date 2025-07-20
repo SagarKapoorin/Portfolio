@@ -47,6 +47,25 @@ docker-compose up --build -d
 
 Access the app at http://localhost:3000, Redis on 6379, and Postgres on 5432.
 
+## Vercel Deployment
+
+On Vercel you can run the mail queue processor as a scheduled function (cron).  Add a `vercel.json` at the project root:
+```json
+{
+  "version": 3,
+  "crons": [
+    { "path": "/api/cron-mail", "schedule": "0 */6 * * *" }
+  ]
+}
+```
+This will trigger the `/api/cron-mail` endpoint every 6 hours to process up to 50 mail jobs. Make sure the following environment variables are set in your Vercel dashboard:
+- DATABASE_URL
+- REDIS_URL
+- EMAIL_FROM (the "from" address for outgoing mail)
+- SMTP credentials (e.g. SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)
+- ADMIN_EMAIL (to receive admin notifications)
+- SITE_URL (optional, for links in email templates)
+
 ## CI/CD (GitHub Actions)
 
 A GitHub Actions workflow is included at `.github/workflows/ci-cd.yml`:
