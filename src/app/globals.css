@@ -126,12 +126,19 @@ select {
   }
 }
 @layer base {
-  /* Hide native date picker icon to avoid double icons */
+  /* Remove all native styling on date inputs to show only our custom icon */
+  input[type="date"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+  }
+  /* Hide calendar picker icon (WebKit) */
   input[type="date"]::-webkit-calendar-picker-indicator {
     display: none !important;
   }
-  /* Hide other native controls in WebKit and IE/Edge */
+  /* Hide spin buttons, clear and expand controls */
   input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-outer-spin-button,
   input[type="date"]::-webkit-clear-button,
   input[type="date"]::-ms-clear,
   input[type="date"]::-ms-expand {
