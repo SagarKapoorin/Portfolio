@@ -126,8 +126,16 @@ select {
   }
 }
 @layer base {
+  /* Hide native date picker icon to avoid double icons */
   input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1) brightness(1) !important;
+    display: none !important;
+  }
+  /* Hide other native controls in WebKit and IE/Edge */
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-clear-button,
+  input[type="date"]::-ms-clear,
+  input[type="date"]::-ms-expand {
+    display: none !important;
   }
 }
 @keyframes slideUp {
