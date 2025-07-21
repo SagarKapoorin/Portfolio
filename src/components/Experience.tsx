@@ -15,7 +15,7 @@ export function Experience() {
             Key Contributions at Hanabitech:
           </p>
           <ul className="list-disc list-inside text-white dark:text-neutral-200 text-xs md:text-sm font-normal mb-8 space-y-2">
-            <li>Built the Task module end-to-end (frontend & backend).</li>
+            <li>Built the Task module end-to-end.</li>
             <li>Optimized main landing page: bug fixes, UI enhancements, added new functionalities & performance gains.</li>
             <li>Developed React Native app features: Google auth & AI-powered real-time tasks.</li>
             <li>Streamlined data pipelines, operational workflows & DB queries.</li>
