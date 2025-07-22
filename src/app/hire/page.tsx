@@ -73,8 +73,8 @@ export default function HirePage() {
   if (status === 'loading' || available === null) return <p>Loading...</p>;
   if (available === false) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="bg-black/60 backdrop-blur-lg rounded-2xl shadow-xl p-8 max-w-md text-center">
+      <div className="flex items-center justify-center min-h-screen bg-transparent">
+        <div className="bg-transparent rounded-2xl shadow-xl p-8 max-w-md text-center">
           <h2 className="text-2xl font-bold text-red-500 mb-4">Not Available for Hire</h2>
           <p className="text-white mb-2">Currently not available for hire.</p>
           <p className="text-gray-400">Please check back later.</p>
