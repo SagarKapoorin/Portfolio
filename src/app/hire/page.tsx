@@ -71,7 +71,17 @@ export default function HirePage() {
     fetchStatus();
   }, []);
   if (status === 'loading' || available === null) return <p>Loading...</p>;
-  if (available === false) return <p>Currently not available for hire. Please check back later.</p>;
+  if (available === false) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="bg-black/60 backdrop-blur-lg rounded-2xl shadow-xl p-8 max-w-md text-center">
+          <h2 className="text-2xl font-bold text-red-500 mb-4">Not Available for Hire</h2>
+          <p className="text-white mb-2">Currently not available for hire.</p>
+          <p className="text-gray-400">Please check back later.</p>
+        </div>
+      </div>
+    );
+  }
   if (!session) return <p>Please sign in to send a hire request.</p>;
   if (used >= limit) {
     return (
