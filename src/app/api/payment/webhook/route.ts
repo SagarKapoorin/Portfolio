@@ -32,7 +32,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ status: 'ignored' }, { status: 200 });
   }
   await prisma.webhookEvent.create({ data: { id: eventId, type: eventType } });
-  if (eventType === 'payment.failed'|| eventType === 'order.paid') {
+  // Handle payment succeeded or failed events
+  if (eventType === 'payment.failed' || eventType === 'payment.captured') {
     const paymentData = JSON.stringify(event.payload.payment.entity);
     const paymentEntity = JSON.parse(paymentData);
     const orderId = paymentEntity.order_id as string;
@@ -41,7 +42,8 @@ export async function POST(req: Request) {
       include: { user: true },
     });
     if (paymentRec && paymentRec.status === 'PENDING') {
-      const newStatus = (eventType === 'order.paid') ? 'COMPLETED' : 'FAILED';
+      // Mark as COMPLETED for captured payments, FAILED for failed payments
+      const newStatus = (eventType === 'payment.captured') ? 'COMPLETED' : 'FAILED';
       await prisma.payment.update({
         where: { id: paymentRec.id },
         data: { status: newStatus },
