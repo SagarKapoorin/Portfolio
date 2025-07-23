@@ -13,10 +13,8 @@ model User {
   name         String
   password     String?
   payments     Payment[]
-  // messages and subscriptions removed
   loginType    LoginType
   createdAt    DateTime      @default(now())
-  // relation to hire requests
   hireRequests HireRequest[]
 
   @@index([email])
@@ -33,13 +31,25 @@ model Payment {
   razorpayOrderId String?       @unique
 }
 
-// Messages and Subscription models removed as they are no longer used
 
 model WebhookEvent {
   id          String    @id
   type        String
   receivedAt  DateTime  @default(now())
   processedAt DateTime?
+}
+
+model DowntimeWindow {
+  id        Int      @id @default(autoincrement())
+  gateway   String
+  method    String
+  startTime DateTime
+  endTime   DateTime?
+  duration  Int?     
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([gateway, method, endTime])
 }
 
 model DeveloperStatus {
@@ -72,4 +82,3 @@ enum PaymentStatus {
   REFUNDED
 }
 
-// SubscriptionStatus enum removed; no Subscription model
