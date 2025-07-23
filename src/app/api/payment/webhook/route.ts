@@ -38,8 +38,33 @@ export async function POST(req: Request) {
     console.error('Cannot determine event id from entity', entity);
     return NextResponse.json({ error: 'Invalid payload: missing id' }, { status: 400 });
   }
-    console.log('Received webhook event:', eventId);
-
-   return NextResponse.json({ status: 'ok' }, { status: 200 });
-
+  console.log('Received webhook event:', eventId);
+  const existing = await prisma.webhookEvent.findUnique({ where: { id: eventId } });
+  if (existing) {
+    return NextResponse.json({ status: 'ignored' }, { status: 200 });
+  }
+  await prisma.webhookEvent.create({ data: { id: eventId, type: eventType } });
+  if (eventType === 'payment.failed' || eventType === 'payment.captured') {
+    const orderId = entity.order_id as string;
+    const paymentRec = await prisma.payment.findUnique({
+      where: { razorpayOrderId: orderId },
+      include: { user: true },
+    });
+    if (paymentRec && paymentRec.status === 'PENDING') {
+      const newStatus = (eventType === 'payment.captured') ? 'COMPLETED' : 'FAILED';
+      await prisma.payment.update({
+        where: { id: paymentRec.id },
+        data: { status: newStatus },
+      });
+      try {
+        await enqueueMailJob('payment-email', {
+          userEmail: paymentRec.user.email,
+          paymentData: { amount: paymentRec.amount, currency: paymentRec.currency },
+        });
+      } catch (err) {
+        console.error('Failed to enqueue payment email job', err);
+      }
+    }
+  }
+  return NextResponse.json({ status: 'ok' }, { status: 200 });
 }
