@@ -19,12 +19,10 @@ export async function POST(req: Request) {
   let event: any;
   try {
     event = JSON.parse(bodyText);
-    console.log(bodyText)
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
   const eventType = event.event as string;
-  // Determine the payload key by joining all segments except the last (e.g. "payment.downtime" for "payment.downtime.started")
   const segments = eventType.split('.');
   const payloadKey = segments.slice(0, -1).join('.');
   const eventPayload = event.payload ?? {};
@@ -34,30 +32,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
   }
   const entity = payloadData.entity;
-  // For payment events use order_id, otherwise fallback to id
   const eventId = (typeof entity.order_id === 'string' ? entity.order_id : undefined)
     || (typeof entity.id === 'string' ? entity.id : undefined);
   if (!eventId) {
     console.error('Cannot determine event id from entity', entity);
     return NextResponse.json({ error: 'Invalid payload: missing id' }, { status: 400 });
   }
-  console.log('Payload entity:', entity);
   console.log('Received webhook event:', eventId);
   const existing = await prisma.webhookEvent.findUnique({ where: { id: eventId } });
   if (existing) {
     return NextResponse.json({ status: 'ignored' }, { status: 200 });
   }
   await prisma.webhookEvent.create({ data: { id: eventId, type: eventType } });
-  // Handle payment succeeded or failed events
   if (eventType === 'payment.failed' || eventType === 'payment.captured') {
-    // Use extracted entity for payment events
     const orderId = entity.order_id as string;
     const paymentRec = await prisma.payment.findUnique({
       where: { razorpayOrderId: orderId },
       include: { user: true },
     });
     if (paymentRec && paymentRec.status === 'PENDING') {
-      // Mark as COMPLETED for captured payments, FAILED for failed payments
       const newStatus = (eventType === 'payment.captured') ? 'COMPLETED' : 'FAILED';
       await prisma.payment.update({
         where: { id: paymentRec.id },
