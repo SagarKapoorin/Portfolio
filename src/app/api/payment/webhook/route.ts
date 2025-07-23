@@ -23,9 +23,25 @@ export async function POST(req: Request) {
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
-  const eventId = JSON.parse(JSON.stringify(event.payload.payment.entity)).order_id;
-  const eventType = event.event;
-  console.log(JSON.parse(JSON.stringify(event.payload.payment.entity)));
+  const eventType = event.event as string;
+  // Determine the payload key by joining all segments except the last (e.g. "payment.downtime" for "payment.downtime.started")
+  const segments = eventType.split('.');
+  const payloadKey = segments.slice(0, -1).join('.');
+  const eventPayload = event.payload ?? {};
+  const payloadData = eventPayload[payloadKey];
+  if (!payloadData || typeof payloadData !== 'object' || !payloadData.entity) {
+    console.error(`Missing payload data for key "${payloadKey}"`, eventPayload);
+    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+  }
+  const entity = payloadData.entity;
+  // For payment events use order_id, otherwise fallback to id
+  const eventId = (typeof entity.order_id === 'string' ? entity.order_id : undefined)
+    || (typeof entity.id === 'string' ? entity.id : undefined);
+  if (!eventId) {
+    console.error('Cannot determine event id from entity', entity);
+    return NextResponse.json({ error: 'Invalid payload: missing id' }, { status: 400 });
+  }
+  console.log('Payload entity:', entity);
   console.log('Received webhook event:', eventId);
   const existing = await prisma.webhookEvent.findUnique({ where: { id: eventId } });
   if (existing) {
@@ -34,9 +50,8 @@ export async function POST(req: Request) {
   await prisma.webhookEvent.create({ data: { id: eventId, type: eventType } });
   // Handle payment succeeded or failed events
   if (eventType === 'payment.failed' || eventType === 'payment.captured') {
-    const paymentData = JSON.stringify(event.payload.payment.entity);
-    const paymentEntity = JSON.parse(paymentData);
-    const orderId = paymentEntity.order_id as string;
+    // Use extracted entity for payment events
+    const orderId = entity.order_id as string;
     const paymentRec = await prisma.payment.findUnique({
       where: { razorpayOrderId: orderId },
       include: { user: true },
