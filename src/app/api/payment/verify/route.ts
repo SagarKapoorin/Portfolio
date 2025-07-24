@@ -4,7 +4,7 @@ import { authOptions } from '../../auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
-import { enqueueMailJob, enqueueNotificationJob } from '@/lib/queue';
+import { enqueueMailJob } from '@/lib/queue';
 import { z } from 'zod';
 
 const VerifySchema = z.object({
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   const receipt = order.receipt as string;
   await prisma.payment.update({ where: { id: receipt }, data: { status: 'COMPLETED' } });
   const paymentRecord = await prisma.payment.findUnique({ where: { id: receipt } });
-  await enqueueNotificationJob({ type: 'payment_completed', payload: paymentRecord });
+  // await enqueueNotificationJob({ type: 'payment_completed', payload: paymentRecord });
   try {
     await enqueueMailJob('payment-email', {
       userEmail: session.user.email,

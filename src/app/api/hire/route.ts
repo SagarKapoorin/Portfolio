@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
 import { z } from 'zod';
-import { enqueueMailJob, enqueueNotificationJob } from '@/lib/queue';
+import { enqueueMailJob } from '@/lib/queue';
 
 const HireSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -42,17 +42,17 @@ export async function POST(req: Request) {
   const newRequest = await prisma.hireRequest.create({
     data: { title, budget, projectDetail, timePeriod, user_id: user.id },
   });
-  await enqueueNotificationJob({
-    type: 'new_message',
-    payload: {
-      id: newRequest.id,
-      title,
-      budget,
-      projectDetail,
-      timePeriod,
-      user_email: user.email,
-    },
-  });
+  // await enqueueNotificationJob({
+  //   type: 'new_message',
+  //   payload: {
+  //     id: newRequest.id,
+  //     title,
+  //     budget,
+  //     projectDetail,
+  //     timePeriod,
+  //     user_email: user.email,
+  //   },
+  // });
   try {
     await enqueueMailJob('hire-email', {
       userEmail: session.user.email,
