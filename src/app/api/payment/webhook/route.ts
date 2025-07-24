@@ -38,7 +38,9 @@ export async function POST(req: Request) {
     console.error('Cannot determine event id from entity', entity);
     return NextResponse.json({ error: 'Invalid payload: missing id' }, { status: 400 });
   }
+  console.log('Received event:', eventType, 'for', eventId);
   if (eventType === 'payment.downtime.started' || eventType === 'payment.downtime.resolved') {
+    console.log('Received downtime event:', eventType, 'for', eventId);
     const seenKey = 'downtime:seen';
     const seen = await redis.sIsMember(seenKey, eventId);
     if (seen) {
@@ -52,6 +54,7 @@ export async function POST(req: Request) {
     const prefix = `downtime:${gateway}:${method}`;
 
     if (eventType === 'payment.downtime.started') {
+      console.log("Got a downtime started event for", gateway, method);
       const status = await redis.get(`${prefix}:status`);
       if (status !== 'down') {
         const window = await prisma.downtimeWindow.create({
@@ -62,6 +65,7 @@ export async function POST(req: Request) {
       }
       await redis.set(`${prefix}:lastPing`, Date.now().toString());
     } else {
+      console.log("Got a downtime resolved event for", gateway, method);
       const status = await redis.get(`${prefix}:status`);
       if (status === 'down') {
         const idStr = await redis.get(`${prefix}:windowId`);
