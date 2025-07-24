@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     console.error('Cannot determine event id from entity', entity);
     return NextResponse.json({ error: 'Invalid payload: missing id' }, { status: 400 });
   }
-  console.log('Received event:', eventType, 'for', eventId);
+  console.log('Received '+eventPayload);
   if (eventType === 'payment.downtime.started' || eventType === 'payment.downtime.resolved') {
     console.log('Received downtime event:', eventType, 'for', eventId);
     const seenKey = 'downtime:seen';
