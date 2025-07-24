@@ -15,7 +15,6 @@ export async function POST() {
  */
 export async function GET(request: Request) {
   try {
-    console.log('hitting');
     const { drainMailQueue } = await import('@/lib/mail-processor');
     const processed = await drainMailQueue();
     return NextResponse.json({ success: true, processed });
