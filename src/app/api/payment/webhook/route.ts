@@ -41,16 +41,14 @@ export async function POST(req: Request) {
   }
   console.log("Instrument:", extractInstrumentKey(entity.instrument));
   if (eventType === 'payment.downtime.started' || eventType === 'payment.downtime.resolved') {
-    console.log('Received downtime event:', eventType, 'for', eventId);
-    const seenKey = 'downtime:seen';
-    const seen = await redis.sIsMember(seenKey, eventId);
-    if (seen) {
-      return NextResponse.json({ status: 'ignored' }, { status: 200 });
-    }
-    await redis.sAdd(seenKey, eventId);
-    await redis.expire(seenKey, 24 * 3600);
+const seenKey = `downtime:seen:${eventId}`;
+const seen = await redis.exists(seenKey);
+if (seen) {
+  return NextResponse.json({ status: 'ignored' }, { status: 200 });
+}
 
-    const gateway = (entity.gateway as string) || 'default';
+await redis.set(seenKey, '1', { EX: 24 * 3600 });
+    const gateway = extractInstrumentKey(entity.instrument) || 'default';
     const method = (entity.method as string) || 'default';
     const prefix = `downtime:${gateway}:${method}`;
 
