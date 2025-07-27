@@ -28,7 +28,7 @@ model Payment {
   status          PaymentStatus @default(PENDING)
   user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id         String
-  razorpayOrderId String        @unique
+  razorpayOrderId String?       @unique
 
   @@index([user_id])
   @@index([user_id, createdAt])
