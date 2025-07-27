@@ -29,6 +29,9 @@ model Payment {
   user            User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id         String
   razorpayOrderId String?       @unique
+
+  @@index([user_id])
+  @@index([user_id, createdAt])
 }
 
 
@@ -67,6 +70,9 @@ model HireRequest {
   user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String
   createdAt     DateTime @default(now())
+
+  @@index([user_id])
+  @@index([user_id, createdAt])
 }
 
 enum LoginType {
