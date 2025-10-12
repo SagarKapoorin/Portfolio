@@ -1,11 +1,48 @@
 import type { NextAuthOptions } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import SpotifyProvider from "next-auth/providers/spotify";
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+  try {
+    const url = 'https://accounts.spotify.com/api/token';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${Buffer.from(
+          `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+        ).toString('base64')}`,
+      },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: token.refreshToken as string,
+      }),
+    });
+    const refreshed = await response.json();
+    if (!response.ok) {
+      throw refreshed;
+    }
+    return {
+      ...token,
+      accessToken: refreshed.access_token,
+      accessTokenExpires: Date.now() + refreshed.expires_in * 1000,
+      // Fall back to old refresh token
+      refreshToken: refreshed.refresh_token ?? token.refreshToken,
+    };
+  } catch (error) {
+    console.error('Error refreshing Spotify access token', error);
+    return { ...token, error: 'RefreshAccessTokenError' };
+  }
+}
+
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -35,6 +72,29 @@ export const authOptions: NextAuthOptions = {
           if (!isPasswordCorrect) {
             throw new Error('Incorrect password');
           }
+        }
+        return user;
+      },
+    }),
+    SpotifyProvider({
+      clientId: process.env.SPOTIFY_CLIENT_ID!,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope:
+            'user-read-email user-top-read user-read-playback-state user-modify-playback-state user-read-currently-playing'
+        }
+      },
+      async profile(profile) {
+        let user = await prisma.user.findUnique({ where: { email: profile.email! } });
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              email: profile.email!,
+              name: profile.display_name || profile.email!,
+              loginType: 'SPOTIFY',
+            },
+          });
         }
         return user;
       },
@@ -85,17 +145,29 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id; 
-        token.email = user.email; 
+    async jwt({ token, user, account }) {
+      if (account && user && account.provider === 'spotify') {
+        token.id = user.id;
+        token.email = user.email;
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+        token.accessTokenExpires = Date.now() + (account.expires_in as number) * 1000;
+      }
+      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+      if (token.refreshToken) {
+        return await refreshAccessToken(token as JWT);
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id; 
-        session.user.email = token.email; 
+        session.user._id = token.id;
+        session.user.email = token.email as string;
+        session.user.accessToken = token.accessToken as string;
+        session.user.refreshToken = token.refreshToken as string;
+        session.user.accessTokenExpires = token.accessTokenExpires as number;
       }
       return session;
     },

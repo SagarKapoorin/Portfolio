@@ -107,6 +107,9 @@ A personal developer portfolio showcasing projects, experience, hire request man
 | NEXT_PUBLIC_RESUME_URL         | URL to resume (used in header & social links)               |
 | NEXT_PUBLIC_POSTHOG_KEY        | PostHog project key                                         |
 | NEXT_PUBLIC_POSTHOG_API_HOST   | PostHog API host (default: https://app.posthog.com)         |
+| SPOTIFY_CLIENT_ID              | Spotify application Client ID                               |
+| SPOTIFY_CLIENT_SECRET          | Spotify application Client Secret                           |
+| SPOTIFY_REFRESH_TOKEN          | Spotify OAuth Refresh Token (from Authorization Code Flow)   |
 
 ### Installation
 

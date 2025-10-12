@@ -79,6 +79,7 @@ enum LoginType {
   GOOGLE
   PASSWORD
   GITHUB
+  SPOTIFY
 }
 
 enum PaymentStatus {
