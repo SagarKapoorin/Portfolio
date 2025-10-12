@@ -16,7 +16,7 @@ export default async function PaymentsPage({ searchParams }: Props) {
     redirect('/signin');
   }
   const sp = await searchParams;
-  const userId = session.user.id;
+  const userId = session.user._id;
   const pageParam = sp.page;
   const page = parseInt(
     Array.isArray(pageParam) ? pageParam[0] : pageParam || '1',
