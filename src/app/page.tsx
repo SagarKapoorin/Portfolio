@@ -10,8 +10,13 @@ import SocialMedia from "@/components/SocialMedia";
 const proofPoints = [
   { value: "1931", label: "LeetCode rating" },
   { value: "1436", label: "Codeforces max" },
-  { value: "1.2K/min", label: "GCP Cloud Tasks scale" },
-  { value: "600ms", label: "Optimized P95 latency" },
+  { value: "200+", label: "DSA problems solved" },
+  { value: "Top 3.44%", label: "LeetCode global rank" },
+  { value: "Specialist", label: "Codeforces title" },
+  { value: "326", label: "Constructor Open Cup rank" },
+  { value: "2026", label: "B.Tech CSE graduating year" },
+  { value: "3", label: "Software internships" },
+  { value: "2023", label: "Hacktoberfest contributor" },
 ];
 
 const capabilities = [
@@ -71,11 +76,11 @@ const Home = () => {
                 </span>
               </div>
             </div>
-            <div className="grid gap-px bg-[#23252a] sm:grid-cols-2">
+            <div className="grid gap-px bg-[#23252a] sm:grid-cols-2 lg:grid-cols-3">
               {proofPoints.map((point) => (
-                <div key={point.label} className="bg-[#0f1011] p-5">
-                  <p className="text-3xl font-semibold text-[#f7f8f8]">{point.value}</p>
-                  <p className="mt-2 text-sm text-[#8a8f98]">{point.label}</p>
+                <div key={point.label} className="min-h-[112px] select-none bg-[#0f1011] p-4">
+                  <p className="text-2xl font-semibold leading-none text-[#f7f8f8]">{point.value}</p>
+                  <p className="mt-3 text-sm leading-5 text-[#8a8f98]">{point.label}</p>
                 </div>
               ))}
             </div>
