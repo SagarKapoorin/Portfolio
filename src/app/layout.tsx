@@ -57,9 +57,9 @@ export default function RootLayout({
         <Providers>
           <PostHogProvider>
             <AnimatedBackground />
-            <div className="relative z-10 flex flex-col min-h-screen">
+            <div className="relative z-10 flex min-h-screen flex-col">
               <Header />
-            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="flex-grow">
               {children}
             </main>
               <Footer />

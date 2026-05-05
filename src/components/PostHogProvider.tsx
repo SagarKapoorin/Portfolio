@@ -12,6 +12,7 @@ export default function PostHogProvider({ children }: Props) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (process.env.NODE_ENV !== 'production') return;
     const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
     const host = process.env.NEXT_PUBLIC_POSTHOG_API_HOST || 'https://app.posthog.com';
     if (key && !posthog.__loaded) {
@@ -20,6 +21,7 @@ export default function PostHogProvider({ children }: Props) {
   }, []);
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') return;
     if (posthog && pathname) {
       posthog.capture('$pageview');
     }

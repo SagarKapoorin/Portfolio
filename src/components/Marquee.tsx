@@ -3,35 +3,38 @@ import Marquee from 'react-fast-marquee';
 import { Monitor, Server, Database, Terminal, Layers, Briefcase, Code } from 'lucide-react';
 
 const items = [
-  { text: 'Frontend', icon: Monitor },
-  { text: 'Backend', icon: Server },
-  { text: 'Database', icon: Database },
+  { text: 'React', icon: Monitor },
+  { text: 'Node.js', icon: Server },
+  { text: 'PostgreSQL', icon: Database },
   { text: 'Full Stack', icon: Layers },
-  { text: 'APIs', icon: Terminal },
-  { text: 'Freelance', icon:Briefcase },
-  { text: 'CP', icon: Code },
+  { text: 'Java', icon: Terminal },
+  { text: 'MongoDB', icon: Database },
+  { text: 'Docker', icon: Briefcase },
+  { text: 'Competitive Programming', icon: Code },
+  { text: 'Redis', icon: Database },
+  { text: 'Golang', icon: Terminal },
 ];
 
 const MarqueeSection = () => {
   return (
-    <div className="bg-transparent py-8 pb-0 overflow-hidden cursor-pointer pt-0 mt-4" >
+    <div className="mt-16 overflow-hidden border-y border-[#23252a] bg-[#0f1011]/70 py-3 cursor-pointer" >
       <Marquee
         gradient={true}
-        gradientColor="17, 24, 39"
-        gradientWidth={100}
-        speed={20}
+        gradientColor="1, 1, 2"
+        gradientWidth={90}
+        speed={24}
         pauseOnHover={true}
-        className="py-4"
+        className="py-2"
       >
         {items.concat(items).map((item, index) => {
           const Icon = item.icon;
           return (
             <div
               key={index}
-              className="flex items-center mx-4 text-white/90 text-1xl"
+              className="mx-3 flex items-center rounded-full border border-[#23252a] bg-[#141516] px-4 py-2 text-[#d0d6e0]"
             >
-              <Icon className="w-6 h-6 mr-2" />
-              <span className="text-1xl font-bold">{item.text}</span>
+              <Icon className="mr-2 h-4 w-4 text-[#5e6ad2]" />
+              <span className="text-sm font-medium">{item.text}</span>
             </div>
           );
         })}

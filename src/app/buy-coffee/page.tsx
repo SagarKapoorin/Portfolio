@@ -114,42 +114,42 @@ export default function BuyCoffeePage() {
 
   return (
     
-    <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:p-6">
+    <div className="portfolio-shell flex min-h-[calc(100vh-64px)] items-center justify-center py-16">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <div className="w-full max-w-md sm:max-w-xl bg-white/10 backdrop-blur-md rounded-3xl shadow-xl border border-white/20 p-6 sm:p-8 flex flex-col items-center space-y-8">
+      <div className="portfolio-panel flex w-full max-w-xl flex-col items-center space-y-8 p-6 sm:p-8">
         <div className="flex items-center space-x-2">
-          <Coffee className="w-8 h-8 text-yellow-300" />
-          <h1 className="text-2xl sm:text-3xl font-bold text-white whitespace-nowrap">Buy Me a Coffee</h1>
+          <Coffee className="h-8 w-8 text-[#f7a501]" />
+          <h1 className="whitespace-nowrap text-2xl font-semibold text-[#f7f8f8] sm:text-3xl">Buy Me a Coffee</h1>
         </div>
-        <p className="text-gray-300 text-center">Your support keeps me brewing and coding. Thank you!</p>
-        <div className="text-white text-2xl font-semibold">{currency} {amount}</div>
+        <p className="text-center text-[#8a8f98]">Your support keeps me brewing and coding. Thank you!</p>
+        <div className="text-2xl font-semibold text-[#f7f8f8]">{currency} {amount}</div>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
           <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 w-full">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-200 mb-1">Amount</label>
+              <label className="mb-2 block text-sm font-medium text-[#d0d6e0]">Amount</label>
               <div className="relative">
                 <input
                   type="number"
                   step="0.1"
                   {...register('amount', { valueAsNumber: true })}
-                  className="w-full bg-black/20 text-white placeholder-gray-300 rounded-lg px-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none -moz-appearance:textfield"
+                  className="w-full rounded-lg border border-[#23252a] bg-[#141516] px-4 py-3 pr-10 text-white outline-none transition-colors placeholder:text-[#62666d] focus:border-[#5e6ad2] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none -moz-appearance:textfield"
                 />
                 <div className="absolute inset-y-0 right-2 flex flex-col justify-center space-y-1">
                   <button type="button" onClick={handleIncrement} className="p-0">
-                    <ChevronUp className="w-4 h-4 text-gray-300 hover:text-yellow-300" />
+                    <ChevronUp className="h-4 w-4 text-[#8a8f98] hover:text-[#f7a501]" />
                   </button>
                   <button type="button" onClick={handleDecrement} className="p-0">
-                    <ChevronDown className="w-4 h-4 text-gray-300 hover:text-yellow-300" />
+                    <ChevronDown className="h-4 w-4 text-[#8a8f98] hover:text-[#f7a501]" />
                   </button>
                 </div>
               </div>
-              {errors.amount && <p className="text-yellow-300 text-sm mt-1">{errors.amount.message}</p>}
+              {errors.amount && <p className="mt-1 text-sm text-[#f7a501]">{errors.amount.message}</p>}
             </div>
             <div className="w-full sm:w-32 relative flex justify-start sm:justify-center items-end">
               <Listbox value={currency} onChange={(val) => setValue('currency', val)}>
-              <Listbox.Button className="w-full bg-black/20 text-white rounded-lg px-3 py-2 flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-yellow-400">
+              <Listbox.Button className="flex w-full items-center justify-between rounded-lg border border-[#23252a] bg-[#141516] px-3 py-3 text-white outline-none focus:border-[#5e6ad2]">
                 <span>{currency}</span>
-                <ChevronDown className="w-5 h-5 text-gray-300" />
+                <ChevronDown className="h-5 w-5 text-[#8a8f98]" />
               </Listbox.Button>
               <Transition
                 as={Fragment}
@@ -157,13 +157,13 @@ export default function BuyCoffeePage() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className="absolute mt-1 w-full sm:w-32 bg-black/80 text-white rounded-lg py-1 z-50 shadow-lg">
+                <Listbox.Options className="absolute z-50 mt-1 w-full rounded-lg border border-[#23252a] bg-[#0f1011] py-1 text-white shadow-lg sm:w-32">
                 {['USD','INR'].map((opt) => (
                   <Listbox.Option
                   key={opt}
                   value={opt}
                   className={({ active }) =>
-                    `${active ? 'bg-white/20' : ''} px-4 py-2 cursor-pointer`
+                    `${active ? 'bg-[#141516]' : ''} px-4 py-2 cursor-pointer`
                   }
                   >
                   {opt}
@@ -174,11 +174,11 @@ export default function BuyCoffeePage() {
               </Listbox>
             </div>
           </div>
-          {error && <p className="text-red-400 text-center">{error}</p>}
+          {error && <p className="text-center text-red-400">{error}</p>}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold rounded-lg px-4 py-3 transition-colors"
+            className="portfolio-button-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? 'Processing...' : 'Buy Coffee'}
           </button>

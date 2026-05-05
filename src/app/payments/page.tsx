@@ -73,18 +73,18 @@ export default async function PaymentsPage({ searchParams }: Props) {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="relative flex flex-col min-h-screen">
-      <div className="relative z-10 max-w-4xl mx-auto p-6 space-y-6 w-full">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+    <div className="portfolio-shell relative min-h-[calc(100vh-64px)] py-16">
+      <div className="relative z-10 w-full space-y-6">
+        <h1 className="text-center text-4xl font-semibold text-[#f7f8f8] sm:text-5xl">
           Payment History
         </h1>
-        <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800">
+        <div className="portfolio-panel-flat p-4">
           <FilterForm />
         </div>
-        <div className="bg-zinc-900/50 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-zinc-800">
+        <div className="portfolio-panel-flat p-4">
           <div className="overflow-x-auto">
             <table className="w-full table-auto text-white">
-            <thead className="bg-zinc-800 text-zinc-400 uppercase text-sm">
+            <thead className="bg-[#141516] text-sm uppercase text-[#8a8f98]">
               <tr>
                 <th className="px-4 py-2">Amount</th>
                 <th className="px-4 py-2">Currency</th>
@@ -92,9 +92,9 @@ export default async function PaymentsPage({ searchParams }: Props) {
                 <th className="px-4 py-2">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-700">
+            <tbody className="divide-y divide-[#23252a]">
               {payments.map((p: any) => (
-                <tr key={p.id} className="hover:bg-zinc-800/50">
+                <tr key={p.id} className="hover:bg-[#141516]">
                   <td className="px-4 py-2">{p.amount}</td>
                   <td className="px-4 py-2">{p.currency}</td>
                   <td className="px-4 py-2 capitalize">{p.status}</td>
@@ -133,8 +133,8 @@ export default async function PaymentsPage({ searchParams }: Props) {
                   href={`/payments?${params.toString()}`}
                   className={
                     isActive
-                      ? 'px-3 py-1 rounded-md bg-purple-600 text-white font-bold transition'
-                      : 'px-3 py-1 rounded-md bg-zinc-800 text-zinc-400 hover:bg-zinc-700 transition'
+                      ? 'rounded-md bg-[#5e6ad2] px-3 py-1 font-bold text-white transition'
+                      : 'rounded-md border border-[#23252a] bg-[#0f1011] px-3 py-1 text-[#8a8f98] transition hover:bg-[#141516]'
                   }
                 >
                   {num}

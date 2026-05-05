@@ -1,102 +1,125 @@
 import Image from "next/image";
 import React from "react";
-import { Timeline } from "@/components/ui/timeline";
 import img1 from "@/assets/wyb.webp";
 import img2 from "@/assets/Hanabi.webp";
 import img3 from "@/assets/start.webp";
+import img4 from "@/assets/MatriceAI.webp";
+
+const experiences = [
+  {
+    company: "Matrice AI",
+    role: "Full Stack Developer Intern",
+    period: "Jan 2026 - Present",
+    stack: "Go, React, MongoDB, ClickHouse, Redis, Docker",
+    image: img4.src,
+    points: [
+      "Built incident management workflows for AI camera deployments across 5 cameras.",
+      "Developed no-code rule configuration and alerting flows with alerts delivered in under 5 seconds.",
+      "Created ClickHouse-backed analytics dashboards with graph, table, and camera-group aggregation views.",
+      "Partnered with the ML team to operationalize custom camera models and Vision Language Model product flows.",
+      "Redesigned 5 major product flows and handled CI migration plus 5-10 security fixes across services.",
+    ],
+  },
+  {
+    company: "Hanabi Technologies",
+    role: "Full Stack Developer Intern",
+    period: "Feb 2025 - Jul 2025",
+    stack: "React, React Native, NestJS, Node.js, Docker, MongoDB, Redis, Next.js",
+    image: img2.src,
+    points: [
+      "Built the Task Module end to end, improving task throughput by 65% and adoption to 80% within 4 weeks.",
+      "Shipped React Native features including Google Login and AI chat, improving conversion by about 22%.",
+      "Reduced P95 API latency from about 1.8s to 600ms through optimization, batching, and multi-layer caching.",
+      "Migrated Agenda jobs to GCP Cloud Tasks, scaling to about 1,200 jobs per minute with about 90% fewer failed retries.",
+      "Developed Jira and Google Drive memory connectors for RAG-based AI memory ingestion.",
+    ],
+  },
+  {
+    company: "WYB, Soulgenix Technologies",
+    role: "Software Engineer Intern",
+    period: "Jun 2024 - Sep 2024",
+    stack: "React, JavaScript, A/B testing, frontend performance",
+    image: img1.src,
+    points: [
+      "Delivered React mini-games that increased session time by 25% and day-7 retention by 18%.",
+      "Optimized the frontend codebase to reduce load times and improve application responsiveness.",
+      "Collaborated with backend, Flutter, Unity, design, and QA teams to deliver integrated user experiences.",
+    ],
+  },
+  {
+    company: "Foundation",
+    role: "Started learning in 2022",
+    period: "2022 - Present",
+    stack: "MERN, competitive programming, systems practice",
+    image: img3.src,
+    points: [
+      "Started with the MERN stack and competitive programming.",
+      "Reached Codeforces Specialist with a maximum rating of 1436.",
+      "Reached a LeetCode rating of 1931 and solved 200+ problems.",
+    ],
+  },
+];
 
 export function Experience() {
-  const data = [
-    {
-      title: "Full Stack Developer Intern at Hanabitech",
-      content: (
-        <div>
-          <p className="text-white dark:text-neutral-200 text-sm md:text-base font-semibold mb-4">
-            Key Contributions at Hanabitech:
-          </p>
-          <ul className="list-disc list-inside text-white dark:text-neutral-200 text-xs md:text-sm font-normal mb-8 space-y-2">
-            <li>Built the Task module end-to-end.</li>
-            <li>Optimized main landing page: bug fixes, UI enhancements, added new functionalities & performance gains.</li>
-            <li>Developed React Native app features: Google auth & AI-powered real-time tasks.</li>
-            <li>Streamlined data pipelines, operational workflows & DB queries.</li>
-            <li>Migrated jobs from Agenda.js to Google Cloud Tasks.</li>
-            <li>Reduced FastAPI latency & optimized memory for AI & Neo4j integrations.</li>
-            <li>Created Jira & Google Drive connectors.</li>
-            <li>Implemented team flow & real-time collaboration features.</li>
-            <li>Led RAG AI memory ingestion project (text/CSV/URL); 90% solo development.</li>
-            <li>Enabled i18n for static content & API responses.</li>
-          </ul>
-          <div className="flex flex-wrap mb-6">
-            <Image
-              src={img2.src}
-              alt="Hanabitech work preview"
-              width={500}
-              height={500}
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "SDE Intern at WYB",
-      content: (
-        <div>
-          <p className="text-white dark:text-neutral-200 text-sm md:text-base font-normal mb-8">
-            Start Internship at WYB onsite on Banglore , Developed React Based 7 games 3 activites and out of which 5 games and 2 activites are production ready.
-          </p>
-          <p className="text-white dark:text-neutral-200 text-sm md:text-base font-normal mb-8">
-           Moreover Optimize and improve Performance of Games and Activites
-            </p>
-          <div className="flex mb-6">
-            <Image
-              src={img1.src}
-              alt="cards template"
-              width={800}
-              height={500}
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Started Learning in 2022",
-      content: (
-        <div>
-          <p className="text-white dark:text-neutral-200 text-sm md:text-base font-normal mb-4">
-            Started with MERN stack and CP in 2022 and go on hitting 1436 on Codeforce and 1931 on Leetcode
-          </p>
-         
-          <div className="flex mb-6">
-            <Image
-              src={img3.src}
-              alt="hero template"
-              width={500}
-              height={500}
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
-            />
-           
-          </div>
-        </div>
-      ),
-    },
-  ];
   return (
-    <div className="w-full">
-        <div className="container mx-auto px-4 py-16">
-        <div className="relative">
-          <div className="absolute -left-4 -top-4 w-24 h-24 bg-blue-900/20 rounded-full blur-2xl opacity-60"></div>
-          <div className="absolute right-10 top-0 w-16 h-16 bg-purple-900/20 rounded-full blur-xl opacity-60"></div>
-          <div className="relative flex flex-col items-center text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-            Experiences
-            </h2>
-            <div className="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-6"></div>
-          </div>
+    <section className="portfolio-shell py-20">
+      <div className="mb-10 grid gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+        <div>
+          <p className="font-mono text-xs uppercase text-[#f7a501]">Experience</p>
+          <h2 className="portfolio-section-title mt-3">Product work across AI, analytics, and real-time systems.</h2>
+        </div>
+        <p className="portfolio-section-copy md:max-w-xl md:justify-self-end">
+          A compact timeline of internships and engineering work, focused on the outcomes and systems behind each product.
+        </p>
+      </div>
+
+      <div className="relative">
+        <div className="absolute bottom-0 left-[18px] top-0 hidden w-px bg-[#23252a] md:block" />
+        <div className="grid gap-5">
+          {experiences.map((item) => (
+            <article key={item.company} className="relative grid gap-5 md:grid-cols-[48px_1fr]">
+              <div className="hidden md:flex">
+                <span className="relative z-10 mt-6 flex h-9 w-9 items-center justify-center rounded-full border border-[#34343a] bg-[#0f1011]">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#5e6ad2]" />
+                </span>
+              </div>
+              <div className="portfolio-panel-flat overflow-hidden">
+                <div className="grid lg:grid-cols-[1fr_280px]">
+                  <div className="p-6">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-2xl font-medium text-[#f7f8f8]">{item.role}</h3>
+                        <p className="mt-1 text-sm text-[#8a8f98]">{item.company}</p>
+                      </div>
+                      <span className="rounded-full border border-[#34343a] bg-[#141516] px-3 py-1 text-xs text-[#d0d6e0]">
+                        {item.period}
+                      </span>
+                    </div>
+                    <p className="mt-4 font-mono text-xs leading-5 text-[#d0d6e0]">{item.stack}</p>
+                    <ul className="mt-5 grid gap-3 text-sm leading-6 text-[#8a8f98]">
+                      {item.points.map((point) => (
+                        <li key={point} className="flex gap-3">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#f7a501]" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="border-t border-[#23252a] bg-[#141516] p-3 lg:border-l lg:border-t-0">
+                    <Image
+                      src={item.image}
+                      alt={`${item.company} preview`}
+                      width={560}
+                      height={420}
+                      className="h-full min-h-[180px] w-full rounded-lg object-cover opacity-90"
+                    />
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
-      <Timeline data={data} />
-    </div>
+    </section>
   );
 }

@@ -1,270 +1,176 @@
 "use client";
-import React, { useState } from 'react';
-import { useSession, signOut } from 'next-auth/react';
-import { LogOut, Download, LogIn, Menu, X, Home, User, Coffee, Briefcase, CreditCard } from 'lucide-react';
-import styled from 'styled-components';
-import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation'; 
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import {
+  Briefcase,
+  Coffee,
+  CreditCard,
+  Download,
+  Home,
+  LogIn,
+  LogOut,
+  Menu,
+  User,
+  X,
+} from "lucide-react";
+
+const navItems = [
+  { href: "/", label: "Home", icon: Home },
+  { href: "/aboutme", label: "About", icon: User },
+  { href: "/hire", label: "Hire", icon: Briefcase },
+  { href: "/buy-coffee", label: "Coffee", icon: Coffee },
+  { href: "/payments", label: "Payments", icon: CreditCard },
+];
 
 const Header = () => {
-  const router = useRouter();
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session, status } = useSession();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
-  // Resume URL from environment variable
-  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || '';
+  const [open, setOpen] = useState(false);
+  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || "";
 
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setSidebarOpen(false);
-      setClosing(false);
-    }, 300);
-  };
+  const isActive = (href: string) => pathname === href;
 
   return (
-    <StyledWrapper className="relative z-[2000]">
-      {/* Mobile navigation toggle */}
-      {!sidebarOpen && (
-        <button
-          className="sm:hidden absolute left-4 top-4 z-20 p-1"
-          onClick={() => setSidebarOpen(true)}
-        >
-          <Menu className="w-6 h-6 text-white" />
-        </button>
-      )}
-      {/* Mobile sidebar menu */}
-      {(sidebarOpen || closing) && (
-        <div className="fixed inset-0 z-[2100] flex">
-          <div className="fixed inset-0 bg-black/50" onClick={handleClose} />
-          <div className={`relative w-64 max-w-full h-full flex flex-col justify-between bg-black bg-opacity-60 backdrop-blur-md rounded-tr-2xl rounded-br-2xl p-6 border border-white/10 shadow-lg ${closing ? 'animate-slideOut' : 'animate-slideIn'}`}>
-            <div className="space-y-4">
-              <button className="mb-4 p-1 rounded-md" onClick={handleClose}>
-              <X className="w-6 h-6 text-white" />
-            </button>
-            <nav className="flex flex-col space-y-2">
-              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/'); }}>
-                <Home className="w-5 h-5" />
-                <span>Home</span>
-              </button>
-              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/aboutme'); }}>
-                <User className="w-5 h-5" />
-                <span>About Me</span>
-              </button>
-              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/buy-coffee'); }}>
-                <Coffee className="w-5 h-5" />
-                <span>Buy Coffee</span>
-              </button>
-              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/hire'); }}>
-                <Briefcase className="w-5 h-5" />
-                <span>Hire</span>
-              </button>
-              <button className="flex items-center space-x-2 py-2 text-white hover:text-indigo-400 transition-colors duration-200" onClick={() => { setSidebarOpen(false); router.push('/payments'); }}>
-                <CreditCard className="w-5 h-5" />
-                <span>Payments</span>
-              </button>
-            </nav>
-            </div>
-            {/* Sidebar bottom actions */}
-            <div className="border-t border-white/20 pt-4 flex flex-col space-y-2">
-              <button
-                onClick={() => window.open(resumeUrl, '_blank')}
-                className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
+    <header className="sticky top-0 z-[2000] border-b border-white/[0.06] bg-[#010102]/78 backdrop-blur-xl">
+      <div className="portfolio-shell flex h-16 items-center justify-between">
+        <Link href="/" className="flex items-center gap-3 text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-md border border-[#34343a] bg-[#0f1011] text-sm font-semibold text-[#f7a501]">
+            SK
+          </span>
+          <span className="hidden text-sm font-medium text-[#f7f8f8] sm:block">
+            Sagar Kapoor
+          </span>
+        </Link>
+
+        <nav className="hidden items-center rounded-lg border border-[#23252a] bg-[#0f1011]/80 p-1 md:flex">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
+                  isActive(item.href)
+                    ? "bg-[#18191a] text-[#f7f8f8]"
+                    : "text-[#8a8f98] hover:text-[#f7f8f8]"
+                }`}
               >
-                <Download className="w-5 h-5" />
-                <span>Resume</span>
+                <Icon className="h-4 w-4" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="hidden items-center gap-2 md:flex">
+          {resumeUrl && (
+            <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="portfolio-button-secondary">
+              <Download className="h-4 w-4" />
+              Resume
+            </a>
+          )}
+          {status === "authenticated" ? (
+            <button onClick={() => signOut({ callbackUrl: "/" })} className="portfolio-button-primary">
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          ) : (
+            pathname !== "/signin" && (
+              <button onClick={() => router.push("/signin")} className="portfolio-button-primary">
+                <LogIn className="h-4 w-4" />
+                Sign in
               </button>
-              {status === 'authenticated' ? (
-                <button
-                  onClick={() => {
-                    setSidebarOpen(false);
-                    signOut({ callbackUrl: '/' });
-                  }}
-                  className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span>Sign Out</span>
+            )
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[#23252a] bg-[#0f1011] text-white md:hidden"
+          onClick={() => setOpen(true)}
+          aria-label="Open navigation"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      </div>
+
+      {open && (
+        <div className="fixed inset-0 z-[2200] md:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/70"
+            onClick={() => setOpen(false)}
+            aria-label="Close navigation overlay"
+          />
+          <div className="absolute right-3 top-3 w-[calc(100vw-24px)] max-w-sm rounded-xl border border-[#23252a] bg-[#0f1011] p-4 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="text-sm font-medium text-[#f7f8f8]">Navigation</span>
+              <button
+                type="button"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-[#23252a] text-[#d0d6e0]"
+                onClick={() => setOpen(false)}
+                aria-label="Close navigation"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <nav className="grid gap-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center gap-3 rounded-md px-3 py-3 text-sm ${
+                      isActive(item.href)
+                        ? "bg-[#18191a] text-white"
+                        : "text-[#8a8f98] hover:bg-[#141516] hover:text-white"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+            <div className="mt-4 grid gap-2 border-t border-[#23252a] pt-4">
+              {resumeUrl && (
+                <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="portfolio-button-secondary w-full">
+                  <Download className="h-4 w-4" />
+                  Resume
+                </a>
+              )}
+              {status === "authenticated" ? (
+                <button onClick={() => signOut({ callbackUrl: "/" })} className="portfolio-button-primary w-full">
+                  <LogOut className="h-4 w-4" />
+                  Sign out
                 </button>
               ) : (
                 <button
                   onClick={() => {
-                    setSidebarOpen(false);
-                    router.push('/signin');
+                    setOpen(false);
+                    router.push("/signin");
                   }}
-                  className="flex items-center space-x-2 text-white hover:text-indigo-400 transition-colors duration-200"
+                  className="portfolio-button-primary w-full"
                 >
-                  <LogIn className="w-5 h-5" />
-                  <span>Sign In</span>
+                  <LogIn className="h-4 w-4" />
+                  Sign in
                 </button>
               )}
             </div>
+            {session?.user?.email && (
+              <p className="mt-3 truncate text-xs text-[#62666d]">{session.user.email}</p>
+            )}
           </div>
         </div>
       )}
-      <div className="hidden sm:block absolute left-4 top-4 z-20">
-        <a
-          href={resumeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold rounded-lg px-4 py-2.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
-        >
-          <Download className="w-5 h-5" />
-          <span className="font-medium">Download Resume</span>
-        </a>
-      </div>
-      <div className="hidden sm:flex w-full justify-center items-center z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <section>
-          <label title="home" htmlFor="home" className="label" onClick={() => router.push('/') }>
-            <input
-              id="home"
-              name="page"
-              type="radio"
-              checked={pathname === '/'}
-              onChange={() => {}}
-            />
-            <Home />
-          </label>
-          <label title="aboutme" htmlFor="aboutme" className="label" onClick={() => router.push('/aboutme') }>
-            <input
-              id="aboutme"
-              name="page"
-              type="radio"
-              checked={pathname === '/aboutme'}
-              onChange={() => {}}
-            />
-            <User />
-          </label>
-          <label title="buy-coffee" htmlFor="buy-coffee" className="label" onClick={() => router.push('/buy-coffee') }>
-            <input
-              id="buy-coffee"
-              name="page"
-              type="radio"
-              checked={pathname === '/buy-coffee'}
-              onChange={() => {}}
-            />
-            <Coffee />
-          </label>
-          <label title="hire" htmlFor="hire" className="label" onClick={() => router.push('/hire') }>
-            <input
-              id="hire"
-              name="page"
-              type="radio"
-              checked={pathname === '/hire'}
-              onChange={() => {}}
-            />
-            <Briefcase />
-          </label>
-          <label title="payments" htmlFor="payments" className="label" onClick={() => router.push('/payments') }>
-            <input
-              id="payments"
-              name="page"
-              type="radio"
-              checked={pathname === '/payments'}
-              onChange={() => {}}
-            />
-            <CreditCard />
-          </label>
-        </section>
-      </div>
-      {status === 'authenticated' && session?.user && (
-        <div className="hidden sm:flex absolute right-4 top-4 flex items-center space-x-2 z-10 bg-gray-800 bg-opacity-50 backdrop-blur-md p-2 rounded-full">
-          {session.user.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={session.user.image}
-              alt="Profile"
-              className="w-8 h-8 rounded-full"
-            />
-          )}
-          <span className="text-white text-sm font-medium">
-            {session.user.name || session.user.email}
-          </span>
-          <button
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
-          </button>
-        </div>
-      )}
-      {/* Desktop sign-in button for unauthenticated users */}
-      {status === 'unauthenticated' && pathname !== '/signin' && (
-        <div className="hidden sm:flex absolute right-4 top-4 z-10">
-          <button
-            onClick={() => router.push('/signin')}
-            className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg px-3 py-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
-          >
-            <LogIn className="w-4 h-4" />
-            <span>Sign In</span>
-          </button>
-        </div>
-      )}
-    </StyledWrapper>
+    </header>
   );
-}
-
-const StyledWrapper = styled.div`
-  section {
-    --col-orange: white;
-    --col-dark: transparent;
-    --col-darkGray: #52555a;
-    --col-gray: #aeaeae;
-
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    background-color: var(--col-dark);
-    border-radius: 30px;
-  }
-  .label {
-    padding: 8px 18px;
-    transition: all 200ms;
-    display: inline-block;
-    cursor: pointer;
-  }
-
-  .label input[type="radio"] {
-    display: none;
-  }
-  .label > svg {
-    transition: all 200ms;
-    color: var(--col-gray);
-    width: 18px;
-  }
-  .label:hover:not(:has(input:checked)) > svg {
-    color: white;
-    opacity: 0.6;
-  }
-  .label::before {
-    content: "";
-    display: block;
-    width: 0%;
-    height: 2px;
-    border-radius: 5px;
-    position: relative;
-    left: 50%;
-    top: 20px;
-    background: var(--col-orange);
-    transition: all 200ms;
-  }
-  .label > svg {
-    transition: 300ms;
-    color: var(--col-darkGray);
-    margin-top: 0;
-  }
-  .label:has(input:checked) > svg {
-    color: var(--col-orange);
-    scale: 1.2;
-    margin-top: -5px;
-  }
-
-  .label:has(input:checked)::before {
-    width: 100%;
-    left: 0;
-    top: 25px;
-  }`;
+};
 
 export default Header;
