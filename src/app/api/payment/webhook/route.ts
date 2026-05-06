@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import crypto from 'crypto';
-import { redis } from '@/lib/redis';
+import { redisDel, redisGet, redisSet } from '@/lib/redis';
 import { enqueueMailJob } from '@/lib/queue';
 import { extractInstrumentKey } from '@/lib/utils';
 
@@ -46,20 +46,20 @@ export async function POST(req: Request) {
       const prefix = `downtime:${gateway}:${method}`;
       if (eventType === 'payment.downtime.started') {
         console.log('Got a downtime started event for', gateway, method);
-        const status = await redis.get(`${prefix}:status`);
+        const status = await redisGet(`${prefix}:status`);
         if (status !== 'down') {
           const window = await prisma.downtimeWindow.create({
             data: { gateway, method, startTime: new Date() }
           });
-          await redis.set(`${prefix}:windowId`, window.id.toString());
-          await redis.set(`${prefix}:status`, 'down');
+          await redisSet(`${prefix}:windowId`, window.id.toString());
+          await redisSet(`${prefix}:status`, 'down');
         }
-        await redis.set(`${prefix}:lastPing`, Date.now().toString());
+        await redisSet(`${prefix}:lastPing`, Date.now().toString());
       } else {
         console.log('Got a downtime resolved event for', gateway, method);
-        const status = await redis.get(`${prefix}:status`);
+        const status = await redisGet(`${prefix}:status`);
         if (status === 'down') {
-          const idStr = await redis.get(`${prefix}:windowId`);
+          const idStr = await redisGet(`${prefix}:windowId`);
           const winId = idStr ? parseInt(idStr, 10) : undefined;
           if (winId) {
             const win = await prisma.downtimeWindow.findUnique({ where: { id: winId } });
@@ -72,9 +72,9 @@ export async function POST(req: Request) {
               });
             }
           }
-          await redis.del(`${prefix}:status`);
-          await redis.del(`${prefix}:windowId`);
-          await redis.del(`${prefix}:lastPing`);
+          await redisDel(`${prefix}:status`);
+          await redisDel(`${prefix}:windowId`);
+          await redisDel(`${prefix}:lastPing`);
         }
       }
     } catch (err) {

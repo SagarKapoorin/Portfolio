@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../api/auth/[...nextauth]/options';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
-import { redis } from '@/lib/redis';
+import { redisGet, redisSet } from '@/lib/redis';
 import type { Payment } from '@prisma/client';
 import React from 'react';
 import FilterForm from '@/components/FilterForm';
@@ -52,8 +52,10 @@ export default async function PaymentsPage({ searchParams }: Props) {
   const keyCount = `payments:count:${userId}:${amountStr}:${start?.toISOString() || ''}:${end?.toISOString() || ''}`;
   let payments: Payment[];
   let total;
-  const cachedList = await redis.get(keyList);
-  const cachedCount = await redis.get(keyCount);
+  const [cachedList, cachedCount] = await Promise.all([
+    redisGet(keyList).catch(() => null),
+    redisGet(keyCount).catch(() => null),
+  ]);
   if (cachedList && cachedCount) {
     payments = JSON.parse(cachedList) as Payment[];
     total = parseInt(cachedCount, 10);
@@ -67,8 +69,10 @@ export default async function PaymentsPage({ searchParams }: Props) {
       }),
       prisma.payment.count({ where }),
     ]);
-    await redis.set(keyList, JSON.stringify(payments), { EX: 60 });
-    await redis.set(keyCount, String(total), { EX: 60 });
+    await Promise.allSettled([
+      redisSet(keyList, JSON.stringify(payments), { EX: 60 }),
+      redisSet(keyCount, String(total), { EX: 60 }),
+    ]);
   }
   const totalPages = Math.ceil(total / limit);
 

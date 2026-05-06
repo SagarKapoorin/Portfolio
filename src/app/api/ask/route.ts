@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { redis } from "@/lib/redis";
+import { redisExpire, redisGet, redisIncr, redisSet } from "@/lib/redis";
 import { embedText } from "@/lib/rag/embed";
 import { getGeminiClient } from "@/lib/rag/gemini";
 import { getRagChunks } from "@/lib/rag";
@@ -18,9 +18,9 @@ function getIpAddress(request: Request) {
 
 async function incrementRateLimit(key: string, ttlSec: number) {
   try {
-    const count = await redis.incr(key);
+    const count = await redisIncr(key);
     if (count === 1) {
-      await redis.expire(key, ttlSec);
+      await redisExpire(key, ttlSec);
     }
     return count;
   } catch {
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
 
     let cachedResponse: string | null = null;
     try {
-      cachedResponse = await redis.get(responseCacheKey);
+      cachedResponse = await redisGet(responseCacheKey);
     } catch {
       cachedResponse = null;
     }
@@ -157,7 +157,7 @@ ${question}`;
           controller.close();
 
           await Promise.allSettled([
-            redis.set(responseCacheKey, completeResponse, { EX: 60 * 30 }),
+            redisSet(responseCacheKey, completeResponse, { EX: 60 * 30 }),
             prisma.chatQuery.create({
               data: {
                 question,

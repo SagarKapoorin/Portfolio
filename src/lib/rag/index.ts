@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 import path from "path";
-import { redis } from "@/lib/redis";
+import { redisGet, redisSet } from "@/lib/redis";
 import { embedText } from "@/lib/rag/embed";
 import type { RagChunk } from "@/lib/rag/retrieve";
 
@@ -69,7 +69,7 @@ async function buildChunkTexts() {
 
 export async function getRagChunks() {
   try {
-    const cached = await redis.get(RAG_CACHE_KEY);
+    const cached = await redisGet(RAG_CACHE_KEY);
     if (cached) {
       return JSON.parse(cached) as RagChunk[];
     }
@@ -86,7 +86,7 @@ export async function getRagChunks() {
   }
 
   try {
-    await redis.set(RAG_CACHE_KEY, JSON.stringify(chunks));
+    await redisSet(RAG_CACHE_KEY, JSON.stringify(chunks));
   } catch {
     // Continue without cache persistence.
   }

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { redis } from '@/lib/redis';
+import { redisGet, redisSet } from '@/lib/redis';
 
 export async function GET(req: Request) {
   try {
@@ -10,7 +10,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Missing base or target parameter' }, { status: 400 });
     }
     const cacheKey = `rate:${base}:${target}`;
-    let rateStr = await redis.get(cacheKey);
+    let rateStr = await redisGet(cacheKey).catch(() => null);
     if (!rateStr) {
       const res = await fetch(
         `https://api.exchangerate.host/latest?base=${encodeURIComponent(base)}&symbols=${encodeURIComponent(target)}`
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: 'Invalid rate data' }, { status: 502 });
       }
       rateStr = String(rate);
-      await redis.set(cacheKey, rateStr, { EX: 3600 });
+      await redisSet(cacheKey, rateStr, { EX: 3600 }).catch(() => null);
     }
     const rate = parseFloat(rateStr);
     return NextResponse.json({ rate });

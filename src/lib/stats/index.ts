@@ -1,4 +1,4 @@
-import { redis } from "@/lib/redis";
+import { redisGet, redisSet } from "@/lib/redis";
 import { fetchCodeforcesStats } from "@/lib/stats/codeforces";
 import { fetchGitHubStats } from "@/lib/stats/github";
 import { fetchLeetCodeStats } from "@/lib/stats/leetcode";
@@ -62,7 +62,7 @@ export async function getPortfolioStats(): Promise<StatsPayload> {
   const nowIso = new Date().toISOString();
   let cachedRaw: string | null = null;
   try {
-    cachedRaw = await redis.get(CACHE_KEY);
+    cachedRaw = await redisGet(CACHE_KEY);
   } catch {
     cachedRaw = null;
   }
@@ -87,7 +87,7 @@ export async function getPortfolioStats(): Promise<StatsPayload> {
     };
 
     try {
-      await redis.set(CACHE_KEY, JSON.stringify(freshPayload), { EX: CACHE_TTL_SECONDS });
+      await redisSet(CACHE_KEY, JSON.stringify(freshPayload), { EX: CACHE_TTL_SECONDS });
     } catch {
       // If redis is unavailable, return live data without caching.
     }
