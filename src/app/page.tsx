@@ -3,7 +3,6 @@ import MarqueeSection from "@/components/Marquee";
 import Project from "@/components/Project";
 import { Experience } from "@/components/Experience";
 import SocialMedia from "@/components/SocialMedia";
-import AskSagar from "@/components/AskSagar";
 import { getPortfolioStats } from "@/lib/stats";
 
 const capabilities = [
@@ -130,7 +129,6 @@ const Home = async () => {
       </div>
       <Experience />
       <SocialMedia />
-      <AskSagar />
     </div>
   );
 };

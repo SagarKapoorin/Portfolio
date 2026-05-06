@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import Script from "next/script";
 import PageLoader from "@/components/PageLoader";
 import { getSiteUrl } from "@/lib/site";
+import logo from "@/assets/logo.webp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,11 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "/",
+  },
+  icons: {
+    icon: [{ url: logo.src, type: "image/webp" }],
+    shortcut: [{ url: logo.src, type: "image/webp" }],
+    apple: [{ url: logo.src, type: "image/webp" }],
   },
   openGraph: {
     type: "website",

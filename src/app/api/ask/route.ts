@@ -57,6 +57,10 @@ function getAskErrorResponse(error: unknown) {
 }
 
 export async function POST(request: Request) {
+  if (process.env.ASK_SAGAR_ENABLED !== "true") {
+    return NextResponse.json({ error: "Ask Sagar is currently disabled." }, { status: 404 });
+  }
+
   try {
     const body = await request.json();
     const question = typeof body?.question === "string" ? body.question.trim() : "";
