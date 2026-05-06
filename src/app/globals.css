@@ -361,3 +361,67 @@ select {
   87.5%  { rotate: 1080deg; }
   100%   { rotate: 1080deg; }
 }
+
+.resume-markdown h1,
+.resume-markdown h2,
+.resume-markdown h3,
+.resume-markdown h4 {
+  color: #f7f8f8;
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.resume-markdown p,
+.resume-markdown li {
+  color: #8a8f98;
+  line-height: 1.65;
+}
+
+.resume-markdown a {
+  color: #8ea0ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.resume-markdown ul {
+  margin: 0.65rem 0 0.8rem 1.25rem;
+  list-style: disc;
+}
+
+.resume-markdown strong {
+  color: #f7f8f8;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .resume-print-wrapper {
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .resume-markdown h1,
+  .resume-markdown h2,
+  .resume-markdown h3,
+  .resume-markdown h4,
+  .resume-markdown strong {
+    color: #111 !important;
+  }
+
+  .resume-markdown p,
+  .resume-markdown li {
+    color: #222 !important;
+  }
+
+  .resume-markdown a {
+    color: #111 !important;
+    text-decoration: none !important;
+  }
+}

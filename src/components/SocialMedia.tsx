@@ -10,7 +10,7 @@ interface SocialMediaProps {
 
 const SocialMedia = ({ showContact = true }: SocialMediaProps) => {
   const [contactOpen, setContactOpen] = useState(false);
-  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || "";
+  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || "/SagarKapoor.pdf";
   const socialLinks = [
     {
       name: "Resume",

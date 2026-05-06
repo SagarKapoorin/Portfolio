@@ -1,0 +1,65 @@
+---
+title: "Hanabi Task Module"
+slug: "hanabi-task-module"
+role: "Full Stack Developer Intern"
+period: "Feb 2025 - Jul 2025"
+stack:
+  - "React"
+  - "React Native"
+  - "NestJS"
+  - "Node.js"
+  - "MongoDB"
+  - "Redis"
+summary: "Built the Task Module end-to-end and improved throughput, adoption, and API performance with optimization and caching."
+hero: "A high-impact product module shipped under internship constraints, focused on measurable execution and performance."
+status: "shipped"
+metrics:
+  - label: "Task throughput"
+    value: "+65%"
+  - label: "Adoption"
+    value: "80% in 4 weeks"
+  - label: "P95 latency"
+    value: "1.8s to 600ms"
+  - label: "Jobs scale"
+    value: "1,200/min"
+---
+
+## Problem
+
+The product needed a reliable task workflow with low-latency APIs and strong usage adoption, while also handling growing background job volume.
+
+## Approach
+
+- Built task creation, assignment, and state transitions across backend and frontend.
+- Introduced batching and multi-layer caching for heavy reads.
+- Migrated background jobs from Agenda to GCP Cloud Tasks for more predictable retries.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Mobile[React Native] --> Api[NestJS API]
+    Web[React Web] --> Api
+    Api --> Redis[(Redis cache)]
+    Api --> Mongo[(MongoDB)]
+    Api --> Tasks[GCP Cloud Tasks]
+```
+
+## Key decisions
+
+- Focused first on response-time bottlenecks before feature expansion.
+- Used instrumentation on critical endpoints to validate improvement decisions.
+- Migrated job infrastructure in phases to avoid production regressions.
+
+## Outcomes
+
+- Delivered strong product adoption quickly after release.
+- Reduced API tail latency and improved overall user experience.
+- Increased reliability of async workflows under higher throughput.
+
+## What I would improve next
+
+- Add stricter SLOs and alerting on queue processing latency.
+- Build self-serve dashboards for task workflow health.
+- Introduce contract tests for external integrations.
+

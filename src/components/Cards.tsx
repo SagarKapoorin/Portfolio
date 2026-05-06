@@ -3,12 +3,16 @@
 import Image from "next/image";
 import React from "react";
 import { ArrowUpRight, Building2 } from "lucide-react";
+import Link from "next/link";
 
 interface CardsProps {
   text: string;
   desc: string;
   type: string;
   link: string;
+  isExternal?: boolean;
+  secondaryLink?: string;
+  secondaryLabel?: string;
   imglink: string;
   tags: string[];
 }
@@ -41,10 +45,30 @@ export function Cards(props: CardsProps) {
             </span>
           ))}
         </div>
-        <a href={props.link} target="_blank" rel="noopener noreferrer" className="portfolio-button-secondary mt-6 w-full">
-          View project
-          <ArrowUpRight className="h-4 w-4" />
-        </a>
+        <div className="mt-6 grid gap-2 sm:grid-cols-2">
+          {props.isExternal === false ? (
+            <Link href={props.link} className="portfolio-button-secondary w-full">
+              View case study
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          ) : (
+            <a href={props.link} target="_blank" rel="noopener noreferrer" className="portfolio-button-secondary w-full">
+              View project
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+          )}
+          {props.secondaryLink && (
+            <a
+              href={props.secondaryLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="portfolio-button-secondary w-full"
+            >
+              {props.secondaryLabel || "Open source"}
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+          )}
+        </div>
       </div>
     </article>
   );

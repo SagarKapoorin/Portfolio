@@ -69,17 +69,46 @@ const Project = () => {
         </p>
       </div>
       <div className='grid gap-5 md:grid-cols-2'>
-        <Cards text='2D Multiverse' tags={technologies} imglink={img.src} desc='Real-time 2D collaborative playground with spaces, maps, elements, avatars, and live multi-user interaction, structured as a Turbo monorepo with caching, rate limiting, clustering, and CI/CD automation.' link='https://github.com/SagarKapoorin/2d-Multiverse' type='Personal'/>
+        <Cards
+          text='2D Multiverse'
+          tags={technologies}
+          imglink={img.src}
+          desc='Real-time 2D collaborative playground with spaces, maps, elements, avatars, and live multi-user interaction, structured as a Turbo monorepo with caching, rate limiting, clustering, and CI/CD automation.'
+          link='/work/2d-multiverse'
+          secondaryLink='https://github.com/SagarKapoorin/2d-Multiverse'
+          secondaryLabel='GitHub'
+          isExternal={false}
+          type='Personal'
+        />
         <Cards
           text='Portfolio Platform'
           tags={technologies2}
           imglink={img2.src}
           desc='Personal portfolio and hiring funnel with authentication, payments, hire requests, analytics, automated emails, background workers, webhook processing, rate limiting, caching, and database indexing.'
-          link={currentUrl}
+          link='/work/portfolio-platform'
+          secondaryLink={currentUrl}
+          secondaryLabel='Live app'
+          isExternal={false}
           type='Personal'
         />
-        <Cards text='Socio-Pulse' tags={technologies3} imglink={img3.src} desc='Social platform built with React, Redux Toolkit, Node.js, Express, MongoDB, and Material UI for posts, media upload, and interactive community features.' link='https://github.com/SagarKapoorin/SocialPulse' type='Personal'/>
-      <Cards text='EduCrafter' tags={technologies4} imglink={img4.src} desc='Interactive student portal with learning resources, server-rendered pages, MongoDB data models, and Express.js APIs for education workflows.' link='https://github.com/SagarKapoorin/Student_Portal' type='Personal'/>
+        <Cards
+          text='Socio-Pulse'
+          tags={technologies3}
+          imglink={img3.src}
+          desc='Social platform built with React, Redux Toolkit, Node.js, Express, MongoDB, and Material UI for posts, media upload, and interactive community features.'
+          link='https://github.com/SagarKapoorin/SocialPulse'
+          isExternal
+          type='Personal'
+        />
+      <Cards
+        text='EduCrafter'
+        tags={technologies4}
+        imglink={img4.src}
+        desc='Interactive student portal with learning resources, server-rendered pages, MongoDB data models, and Express.js APIs for education workflows.'
+        link='https://github.com/SagarKapoorin/Student_Portal'
+        isExternal
+        type='Personal'
+      />
       </div>
      <div className="flex items-center justify-center pt-8">
      <a

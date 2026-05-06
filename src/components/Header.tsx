@@ -9,6 +9,7 @@ import {
   Coffee,
   CreditCard,
   Download,
+  FolderKanban,
   Home,
   LogIn,
   LogOut,
@@ -20,6 +21,7 @@ import {
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/aboutme", label: "About", icon: User },
+  { href: "/work", label: "Work", icon: FolderKanban },
   { href: "/hire", label: "Hire", icon: Briefcase },
   { href: "/buy-coffee", label: "Coffee", icon: Coffee },
   { href: "/payments", label: "Payments", icon: CreditCard },
@@ -30,7 +32,7 @@ const Header = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
-  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || "";
+  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL || "/SagarKapoor.pdf";
 
   const isActive = (href: string) => pathname === href;
 

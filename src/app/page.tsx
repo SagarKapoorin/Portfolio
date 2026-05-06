@@ -1,23 +1,10 @@
-"use client";
-
-import React from "react";
 import { ArrowUpRight, Code2, Database, Gauge, Layers3 } from "lucide-react";
 import MarqueeSection from "@/components/Marquee";
 import Project from "@/components/Project";
 import { Experience } from "@/components/Experience";
 import SocialMedia from "@/components/SocialMedia";
-
-const proofPoints = [
-  { value: "1931", label: "LeetCode rating" },
-  { value: "1436", label: "Codeforces max" },
-  { value: "200+", label: "DSA problems solved" },
-  { value: "Top 3.44%", label: "LeetCode global rank" },
-  { value: "Specialist", label: "Codeforces title" },
-  { value: "326", label: "Constructor Open Cup rank" },
-  { value: "2026", label: "B.Tech CSE graduating year" },
-  { value: "3", label: "Software internships" },
-  { value: "2023", label: "Hacktoberfest contributor" },
-];
+import AskSagar from "@/components/AskSagar";
+import { getPortfolioStats } from "@/lib/stats";
 
 const capabilities = [
   {
@@ -42,7 +29,22 @@ const capabilities = [
   },
 ];
 
-const Home = () => {
+function getRelativeTime(input: string) {
+  const now = Date.now();
+  const then = new Date(input).getTime();
+  const minutes = Math.max(1, Math.floor((now - then) / 60000));
+
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+const Home = async () => {
+  const statsPayload = await getPortfolioStats();
+  const updatedAgo = getRelativeTime(statsPayload.fetchedAt);
+
   return (
     <div className="w-full">
       <section className="portfolio-shell pt-20 sm:pt-28">
@@ -70,14 +72,26 @@ const Home = () => {
           <div className="portfolio-panel overflow-hidden">
             <div className="border-b border-[#23252a] px-5 py-4">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-[#f7f8f8]">Current focus</p>
-                <span className="rounded-full bg-[#f7a501] px-2.5 py-1 text-xs font-semibold text-[#23251d]">
-                  AI + Systems
-                </span>
+                <div className="flex items-center gap-3">
+                  <p className="text-sm font-medium text-[#f7f8f8]">Current focus</p>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2c355f] bg-[#1a1d31] px-2.5 py-1 text-[11px] font-medium text-[#d8ddff]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#5e6ad2]" />
+                    live
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="rounded-full bg-[#f7a501] px-2.5 py-1 text-xs font-semibold text-[#23251d]">
+                    AI + Systems
+                  </span>
+                  <p className="mt-1 text-[11px] text-[#62666d]">
+                    updated {updatedAgo}
+                    {statsPayload.stale ? " (cached)" : ""}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="grid gap-px bg-[#23252a] sm:grid-cols-2 lg:grid-cols-3">
-              {proofPoints.map((point) => (
+              {statsPayload.stats.map((point) => (
                 <div key={point.label} className="min-h-[112px] select-none bg-[#0f1011] p-4">
                   <p className="text-2xl font-semibold leading-none text-[#f7f8f8]">{point.value}</p>
                   <p className="mt-3 text-sm leading-5 text-[#8a8f98]">{point.label}</p>
@@ -116,6 +130,7 @@ const Home = () => {
       </div>
       <Experience />
       <SocialMedia />
+      <AskSagar />
     </div>
   );
 };

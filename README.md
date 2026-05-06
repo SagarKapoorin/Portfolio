@@ -23,16 +23,16 @@ A personal developer portfolio showcasing projects, experience, hire request man
 
 ## Features
 
-- Responsive UI with Next.js 15 and Tailwind CSS
+- Hiring-focused homepage with live coding profile stats (LeetCode, Codeforces, GitHub)
+- AI-powered "Ask Sagar" assistant using Gemini + RAG over resume and case studies
+- MDX case-study system with `/work` index and `/work/[slug]` deep-dive pages
+- SEO foundation with route metadata, sitemap, robots, JSON-LD, and dynamic OG images
+- Resume page at `/resume` with print-friendly styling and downloadable PDF output
 - Authentication via NextAuth (Email/Password, GitHub, Google)
 - Hire requests with monthly limits and email notifications
 - Payment integration using Razorpay (order creation, webhook handling)
 - Payment history dashboard with filtering and Redis caching
 - Background queue processing for emails (Redis, NodeMailer, MJML + Handlebars)
-- Database management with Prisma and PostgreSQL
-- Caching with Redis
-- Form validation with React Hook Form and Zod
-- Animations with Framer Motion
 - Analytics integration with PostHog
 - Process management with PM2
 
@@ -55,6 +55,7 @@ A personal developer portfolio showcasing projects, experience, hire request man
 >  - NodeMailer for email delivery
 >  - bcryptjs for password hashing
 >  - PostHog for analytics
+>  - Gemini API (`gemini-2.0-flash`, `text-embedding-004`)
 >
 >- DevOps & Tools:
 >  - Docker & Docker Compose
@@ -104,7 +105,12 @@ A personal developer portfolio showcasing projects, experience, hire request man
 | MAIL_PASS                      | SMTP password or app password                               |
 | EMAIL_FROM                     | Email address used in outgoing emails                       |
 | SITE_URL / NEXT_PUBLIC_BASE_URL| Base URL of your deployed application                       |
-| NEXT_PUBLIC_RESUME_URL         | URL to resume (used in header & social links)               |
+| GEMINI_API_KEY                 | Gemini API key for Ask Sagar (`https://aistudio.google.com/apikey`) |
+| LEETCODE_USERNAME              | LeetCode handle for live stats (default: `SagarKa`)         |
+| CODEFORCES_HANDLE              | Codeforces handle for live stats (default: `BurningHash`)   |
+| GITHUB_USERNAME                | GitHub username for live stats (default: `SagarKapoorin`)   |
+| GITHUB_TOKEN                   | Optional GitHub token to raise API rate limits              |
+| NEXT_PUBLIC_RESUME_URL         | URL to resume PDF (recommended: `/SagarKapoor.pdf`)         |
 | NEXT_PUBLIC_POSTHOG_KEY        | PostHog project key                                         |
 | NEXT_PUBLIC_POSTHOG_API_HOST   | PostHog API host (default: https://app.posthog.com)         |
 
@@ -121,6 +127,12 @@ npm run dev
 ```
 
 Navigate to `http://localhost:3000`.
+
+### Build (includes resume PDF prebuild)
+
+```bash
+npm run build
+```
 
 ### Background Worker
 

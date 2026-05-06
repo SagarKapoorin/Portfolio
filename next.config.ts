@@ -1,17 +1,46 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
+
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
 
 const nextConfig: NextConfig = {
-  // Enable React strict mode; SWC minification and modern bundles are default in current Next.js
   reactStrictMode: true,
+  output: "standalone",
+  productionBrowserSourceMaps: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    domains: ['images.unsplash.com','assets.aceternity.com'],
+  serverExternalPackages: [
+    "@prisma/client",
+    "prisma",
+    "razorpay",
+    "nodemailer",
+    "mjml",
+    "handlebars",
+    "redis",
+    "bcryptjs",
+  ],
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "@headlessui/react",
+      "react-toastify",
+      "@tabler/icons-react",
+    ],
   },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "assets.aceternity.com" },
+    ],
+  },
+  pageExtensions: ["ts", "tsx", "md", "mdx"],
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);

@@ -1,26 +1,30 @@
-# Docker ignore patterns
-
-# dependencies
 node_modules
-
-# next.js build output
 .next
-
-# local environment files
-.env
-.env.example
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-*.log
-
-# Dockerfile and git
-Dockerfile
-.dockerignore
+out
 .git
 .github
 .gitignore
-
-# Editor directories and misc
+.vscode
+.idea
+.cursor
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 .DS_Store
+.env
+.env.*
+!.env.example
+README.md
+docker-compose.yml
+ecosystem.config.js
+ecosystem-docker.config.js
+Dockerfile
+.dockerignore
+terminals
+.next/cache
+coverage
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx

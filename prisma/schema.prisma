@@ -75,6 +75,16 @@ model HireRequest {
   @@index([user_id, createdAt])
 }
 
+model ChatQuery {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  ip        String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 enum LoginType {
   GOOGLE
   PASSWORD
